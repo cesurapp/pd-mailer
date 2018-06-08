@@ -29,7 +29,7 @@ class PdMailerExtension extends Extension
     /**
      * Load Bundle Config and Services.
      *
-     * @param array $configs
+     * @param array            $configs
      * @param ContainerBuilder $container
      *
      * @throws \Exception
@@ -48,7 +48,7 @@ class PdMailerExtension extends Extension
         $container->setParameter('pd_mailer.list_count', $config['list_count']);
 
         // Load Services
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
     }
 }

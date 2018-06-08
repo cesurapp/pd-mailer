@@ -54,8 +54,8 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param ContainerInterface $container
-     * @param RenderInterface $engine
+     * @param ContainerInterface     $container
+     * @param RenderInterface        $engine
      */
     public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container, RenderInterface $engine)
     {
@@ -130,17 +130,16 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
         if ($this->container->getParameter('pd_mailer.logger_active')) {
             // Update Data
             $this->log->setStatus(\Swift_Events_SendEvent::RESULT_FAILED);
-            $this->log->addException($evt->getException()->getMessage() . PHP_EOL);
+            $this->log->addException($evt->getException()->getMessage().PHP_EOL);
 
             // Update
             $this->entityManager->persist($this->log);
             $this->entityManager->flush();
         }
-
     }
 
     /**
-     * Create Mail Log
+     * Create Mail Log.
      *
      * @param \Swift_Mime_SimpleMessage $message
      * @param $status
@@ -179,7 +178,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
     }
 
     /**
-     * Update Log Status & Date
+     * Update Log Status & Date.
      *
      * @param \Swift_Mime_SimpleMessage $message
      * @param $status

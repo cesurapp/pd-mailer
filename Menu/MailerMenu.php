@@ -1,15 +1,15 @@
 <?php
 
 /**
- * This file is part of the pdAdmin package.
+ * This file is part of the pdAdmin pdMailer package.
  *
- * @package     pdAdmin
+ * @package     pdMailer
  *
  * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 pdAdmin
+ * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
  *
- * @link        http://pdadmin.ramazanapaydin.com
+ * @link        https://github.com/rmznpydn/pd-mailer
  */
 
 namespace Pd\MailerBundle\Menu;

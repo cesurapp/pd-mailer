@@ -56,7 +56,7 @@ class TwigRender implements RenderInterface
             ->findOneBy(['templateId' => $templateID, 'status' => true, 'language' => $language]);
 
         if ((null === $template) && ($language !== $this->defaultLanguage)) {
-            return $this->render($templateID, $this->defaultLanguage,$message);
+            return $this->render($templateID, $this->defaultLanguage, $message);
         }
 
         // Render Template
