@@ -1,21 +1,23 @@
 # pdMailer Bundle
-Flexible widget system for Symfony 4+. 
+pdMailer is the SwiftMailer extension is written for pdAdmin. It keeps logs of mail sent by Swiftmailer and provides template interface for mail.
 
-[![Latest Stable Version](https://poser.pugx.org/rmznpydn/pd-widget/v/stable)](https://packagist.org/packages/rmznpydn/pd-widget)
-[![Total Downloads](https://poser.pugx.org/rmznpydn/pd-widget/downloads)](https://packagist.org/packages/rmznpydn/pd-widget)
-[![Latest Unstable Version](https://poser.pugx.org/rmznpydn/pd-widget/v/unstable)](https://packagist.org/packages/rmznpydn/pd-widget)
-[![License](https://poser.pugx.org/rmznpydn/pd-widget/license)](https://packagist.org/packages/rmznpydn/pd-widget)
+[![Latest Stable Version](https://poser.pugx.org/rmznpydn/pd-mailer/v/stable)](https://packagist.org/packages/rmznpydn/pd-mailer)
+[![Total Downloads](https://poser.pugx.org/rmznpydn/pd-mailer/downloads)](https://packagist.org/packages/rmznpydn/pd-mailer)
+[![Latest Unstable Version](https://poser.pugx.org/rmznpydn/pd-mailer/v/unstable)](https://packagist.org/packages/rmznpydn/pd-mailer)
+[![License](https://poser.pugx.org/rmznpydn/pd-mailer/license)](https://packagist.org/packages/rmznpydn/pd-mailer)
 
 Installation
 ---
 
 ### Step 1: Download the Bundle
 
+This package is written for pdadmin and is required for installation.
+
 Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require rmznpydn/pd-widget
+$ composer require rmznpydn/pd-mailer
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -35,126 +37,44 @@ in the `config/bundles.php` file of your project:
 
 return [
     //...
-    Pd\WidgetBundle\PdWidgetBundle::class => ['all' => true]
+    Pd\MailerBundle\PdMailerBundle::class => ['all' => true]
 ];
 ```
 
-Add Widget Routing:
-
-```yaml
-#config/routes.yaml
-
-# Widget Routing
-widget:
-    resource: "@PdWidgetBundle/Resources/config/routing.yml"
-```
-
-Edit Doctrine Settings (`config/packages/doctrine.yaml`):
-
-```yaml
-doctrine:
-    orm:
-        resolve_target_entities:
-            Pd\WidgetBundle\Entity\UserInterface: App\Entity\User
-```
-
-UserInterface field, enter the class for the existing authorization system.
-
-### Step 3: Settings Bundle (Optional)
-You can specify the template for the widget container.
-```yaml
-# config/packages/framework.yaml
-
-pd_widget:
-    base_template: '@PdWidget/widgetBase.html.twig'
-```
-
-Create Your First Widget
+Configs
 ---
+create the config/packages/mailer.yaml file for the settings.
+```yaml
+logger_active: true
+template_active: true
+sender_address: 'example@example.com'
+sender_name: 'pdMailer'
+list_count: 30
+```
+* __logger_active__: Enable mail logs.
+* __template_active__: Enable mail template.
+* __sender_address__: Sender mail adress
+* __sender_name__: Sender Name
+* __list_count__: Log or Template page listing count
 
-#### Step 1: Create Widget Event Listener
-
-Widgets work with Event. Create Widget with Event Listener
-
+How to use
+---
+The PDMailer plug-in will enable all mail to be logged by default. You must use the PdSwiftMessage class to add a template to the post.
 ```php
 <?php
-// src/Widgets/DashboardWidget.php
 
-namespace App\Widgets;
+// Create Message
+$message = (new PdSwiftMessage)
+    ->setTemplateId('register_form_template') // Required
+    ->setFrom('example@example.com', 'pdMailer')
+    ->setTo('example@gmail.com')
+    ->setSubject('Subject')
+    ->setBody(serialize([
+        'firstname' => 'Ramazan',
+        'lastname' => 'Apaydın'
+    ]), 'text/html'); // Data to be used in the template. - Required
 
-use Pd\WidgetBundle\Builder\Item;
-use Pd\WidgetBundle\Event\WidgetEvent;
-
-class Dashboard
-{
-    public function builder(WidgetEvent $event)
-    {
-        // Get Widget Container
-        $widgets = $event->getWidgetContainer();
-
-        // Add Widgets
-        $widgets
-            ->addWidget((new Item('user_info'))
-                ->setGroup('admin')
-                ->setName('widget_user_info.name')
-                ->setDescription('widget_user_info.description')
-                ->setTemplate('widgets/userInfo.html.twig')
-                //->setContent('pdWidget Text Content')
-                //->setRole(['USER_INFO_WIDGET'])
-                ->setData(function () {
-                    return ['userCount' => 5];
-                })
-                ->setOrder(5)
-            );
-    }
-}
+// Send Mail
+$this->get('mailer')->send($message);
 ```
-#### Step 2: Create Widget Template
-You can create a Twig template for the widget or can only use text content.
-```twig
-# templates/userInfo.html.twig
-
-{% if widget.isActive %}
-    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
-        <div class="card text-center bg-primary text-white widget_user_info">
-            <div class="card-body">
-                {# Action Button #}
-                {% include '@PdWidget/widgetAction.html.twig' %}
-
-                <span class="count">{{ widget.data.userCount }}</span>
-                <h5 class="font-weight-light">{{ 'widget_user_info.count'|trans }}</h5>
-            </div>
-        </div>
-    </div>
-{% endif %}
-```
-
-#### Step 3: Create Widget Services:
-```yaml
-# config/services.yaml
-
-# Load All Widgets
-App\Widgets\:
-    resource: '../src/Widgets/*'
-    tags:
-        - { name: kernel.event_listener, event: widget.start, method: builder }
-        
-# Load Single Widget
-App\Widgets\DashboardWidget:
-    tags:
-        - { name: kernel.event_listener, event: widget.start, method: builder }
-```
-
-Rendering Widgets
----
-The creation process is very simple. You should use widget groups for widget creation.
-
-```twig
-# Render all 'admin' widget groups
-{{ pd_widget_render('admin') }}
-
-# Render selected widgets in 'admin' group
-{{ pd_widget_render('admin', ['user_info']) }}
-```
-
-
+Create a template for 'register_form_template' from the pdAdmin panel.
