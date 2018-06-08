@@ -52,7 +52,7 @@
                             </div>
                         </td>
                         <td class="wid-25">{{ log.subject }}</td>
-                        <td class="wid-25">{% for to in log.mTo|keys %}{{ to }}{% endfor %}</td>
+                        <td class="wid-25">{% for to in log.to|keys %}{{ to }}{% endfor %}</td>
                         <td class="wid-20">{{ log.date|timeDiff }}</td>
                         <td class="process"><span class="badge rounded-circle badge-{{ log.status|swiftEvent(true) }}" data-toggle="tooltip" data-tooltip title="{{ log.status|swiftEvent(false) }}">&nbsp;&nbsp;</span></td>
                         <td class="process">

@@ -8,7 +8,7 @@
 {% block content_head %}
     <a href="{{ app.session.get('backUrl') }}" class="back-icon"><i class="material-icons">arrow_back</i></a>
     <span class="text">{{ title|trans }}</span>
-    <span class="desc">{{ description|trans({'%s': form.contentId.vars.data}) }}</span>
+    <span class="desc">{{ description|trans({'%s': form.templateId.vars.data}) }}</span>
     <a href="#" class="addbtn btn-primary" data-tooltip title="{{ 'mail_manager_add_template'|trans }}" onclick="setTemplate()"><i class="material-icons">code</i></a>
 {% endblock %}
 
@@ -57,7 +57,7 @@
 
       $(document).ready(function () {
         setTimeout(function () {
-          var textarea = document.getElementById("mail_template_form_template");
+          var textarea = document.getElementById("template_form_template");
 
           // Hide Textarea
           textarea.style.display = "none";
@@ -116,7 +116,7 @@
           var ifrm = document.getElementById("email-preview");
           var doc = ifrm.contentDocument ? ifrm.contentDocument : ifrm.contentWindow.document;
 
-          doc.write($("#mail_template_form_template").val());
+          doc.write($("#template_form_template").val());
           doc.close();
 
           setTimeout(function () {

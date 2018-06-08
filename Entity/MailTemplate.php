@@ -218,7 +218,7 @@ class MailTemplate
      *
      * @return string
      */
-    public function getContentId()
+    public function getTemplateId()
     {
         return $this->templateId;
     }

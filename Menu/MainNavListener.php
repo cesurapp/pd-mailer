@@ -25,7 +25,8 @@ class MainNavListener
 
         $menu['nav_config']
             ->addChild('nav_mail_manager', 30)
-            ->setLabel('labellll')
-            ->setRoute('admin_mail_list');
+            ->setLabel('nav_mail_manager')
+            ->setRoute('admin_mail_list')
+            ->setRoles(['ADMIN_MAIL_TEMPLATELIST']);
     }
 }
