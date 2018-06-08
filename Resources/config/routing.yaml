@@ -1,0 +1,39 @@
+admin_mail_list:
+    path:   /settings/mail
+    controller: PdMailerBundle:Mail:list
+    methods: [GET]
+admin_mail_template_add:
+    path: /settings/mail/add/{id}
+    controller: PdMailerBundle:Mail:addTemplate
+    methods: [GET, POST]
+admin_mail_template_edit:
+    path: /settings/mail/edit/{id}
+    controller: PdMailerBundle:Mail:editTemplate
+    methods: [GET, POST]
+admin_mail_template_delete:
+    path: /settings/mail/delete/{id}
+    controller: PdMailerBundle:Mail:deleteTemplate
+    methods: [GET]
+admin_mail_template_activate:
+    path: /settings/mail/activate/{id}
+    controller: PdMailerBundle:Mail:activeTemplate
+    methods: [GET]
+admin_mail_logger:
+    path:   /settings/mail/logger
+    controller: PdMailerBundle:Mail:logger
+    methods: [GET]
+admin_mail_logview:
+    path:   /settings/mail/logview/{id}
+    controller: PdMailerBundle:Mail:viewLog
+    methods: [GET]
+admin_mail_logdelete:
+    path:   /settings/mail/logdelete/{mailLog}
+    controller: PdMailerBundle:Mail:deleteLog
+    defaults:
+        mailLog: null
+    methods: [POST,GET]
+
+admin_mail_default_template:
+    path: /settings/mail/defaulttemplate/{templateId}
+    controller: App\Admin\Controller\System\MailController::defaultTemplate
+    methods: [GET, POST]

@@ -1,0 +1,17 @@
+services:
+    # Render Service
+    pd.mailer.render:
+        class: Pd\MailerBundle\Render\TwigRender
+        arguments: ['@twig', '@doctrine.orm.entity_manager', '%default_locale%']
+        public: false
+
+    # Swiftmailer Listener Plugin
+    Pd\MailerBundle\SwiftMailer\SendListener:
+        arguments: ['@doctrine.orm.entity_manager','@service_container', '@pd.mailer.render']
+        tags:
+            - { name: swiftmailer.default.plugin }
+
+    # Add Menu to Main Navigation
+    Pd\MailerBundle\Menu\MainNavListener:
+        tags:
+            - { name: kernel.event_listener, event: admin.main.nav, method: onCreate }
