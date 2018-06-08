@@ -37,9 +37,9 @@ class TwigRender implements RenderInterface
     /**
      * TwigRender constructor.
      *
-     * @param \Twig_Environment      $twig
+     * @param \Twig_Environment $twig
      * @param EntityManagerInterface $entityManager
-     * @param string                 $defaultLanguage
+     * @param string $defaultLanguage
      */
     public function __construct(\Twig_Environment $twig, EntityManagerInterface $entityManager, string $defaultLanguage)
     {
@@ -63,8 +63,10 @@ class TwigRender implements RenderInterface
         if (null !== $template) {
             // Render Body
             try {
-                $this->twig->createTemplate($template->getTemplate());
-                $message->setBody($this->twig->render(unserialize($message->getBody())), $message->getContentType(), $message->getCharset());
+                $message->setBody(
+                    $this->twig->createTemplate($template->getTemplate())->render(unserialize($message->getBody())),
+                    $message->getContentType(),
+                    $message->getCharset());
             } catch (\Exception $e) {
             }
 

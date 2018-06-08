@@ -21,9 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * MailTemplate.
  *
- * @ORM\Table(name="mail_template", uniqueConstraints={@ORM\UniqueConstraint(name="mailId_lang", columns={"templateId", "language"})})
+ * @ORM\Table(name="mail_template")
  * @ORM\Entity(repositoryClass="Pd\MailerBundle\Repository\MailTemplateRepository")
- * @UniqueEntity(fields={"language", "templateId"})
  */
 class MailTemplate
 {
