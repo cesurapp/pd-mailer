@@ -37,9 +37,9 @@ class TwigRender implements RenderInterface
     /**
      * TwigRender constructor.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig_Environment      $twig
      * @param EntityManagerInterface $entityManager
-     * @param string $defaultLanguage
+     * @param string                 $defaultLanguage
      */
     public function __construct(\Twig_Environment $twig, EntityManagerInterface $entityManager, string $defaultLanguage)
     {
