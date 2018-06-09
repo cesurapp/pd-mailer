@@ -9,7 +9,6 @@
     <a href="{{ app.session.get('backUrl') }}" class="back-icon"><i class="material-icons">arrow_back</i></a>
     <span class="text">{{ title|trans }}</span>
     <span class="desc">{{ description|trans({'%s': form.templateId.vars.data}) }}</span>
-    <a href="#" class="addbtn btn-primary" data-tooltip title="{{ 'mail_manager_add_template'|trans }}" onclick="setTemplate()"><i class="material-icons">code</i></a>
 {% endblock %}
 
 {# Content Navigation #}
