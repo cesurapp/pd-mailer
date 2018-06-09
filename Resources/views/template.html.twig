@@ -130,17 +130,5 @@
           templatePreview();
         });
       })
-
-      /**
-       * Set Default Template
-       */
-      function setTemplate() {
-        $.ajax({
-            url: "{{ defaultTemplate }}",
-            success: function (data) {
-              editor.setValue(data);
-            }
-        })
-      }
     </script>
 {% endblock %}
