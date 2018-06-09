@@ -34,8 +34,3 @@ admin_mail_logdelete:
     defaults:
         mailLog: null
     methods: [POST,GET]
-
-admin_mail_default_template:
-    path: /settings/mail/defaulttemplate/{templateId}
-    controller: App\Admin\Controller\System\MailController::defaultTemplate
-    methods: [GET, POST]

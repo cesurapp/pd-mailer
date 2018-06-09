@@ -112,8 +112,7 @@ class MailController extends Controller
             'form' => $form->createView(),
             'objects' => @unserialize($mailLog->getBody()),
             'title' => 'mail_manager_template_add',
-            'description' => 'mail_manager_template_add_desc',
-            'defaultTemplate' => $this->get('router')->generate('admin_mail_default_template', ['templateId' => $form->get('templateId')->getData()]),
+            'description' => 'mail_manager_template_add_desc'
         ]);
     }
 
@@ -150,32 +149,8 @@ class MailController extends Controller
             'form' => $form->createView(),
             'objects' => @unserialize($mailTemplate->getTemplateData()),
             'title' => 'mail_manager_template_edit',
-            'description' => 'mail_manager_template_edit_desc',
-            'defaultTemplate' => $this->get('router')->generate('admin_mail_default_template', ['templateId' => $form->get('templateId')->getData()]),
+            'description' => 'mail_manager_template_edit_desc'
         ]);
-    }
-
-    /**
-     * Get Default Template.
-     *
-     * @param $templateId
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     *
-     * @IsGranted("ADMIN_MAIL_TEMPLATEADD")
-     */
-    public function defaultTemplate($templateId)
-    {
-        // Load Email Template Resource
-        $template = $this->getParameter('kernel.root_dir').'/Admin/Resources/emails/';
-
-        if (file_exists($template."{$templateId}.html")) {
-            $template = file_get_contents($template."{$templateId}.html");
-        } else {
-            $template = '';
-        }
-
-        return $this->json($template);
     }
 
     /**

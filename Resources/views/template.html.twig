@@ -18,13 +18,15 @@
 {# Content Body #}
 {% block content_body %}
     {# View Parameters #}
-    <div class="alert alert-primary code-description">
-        <h6>{{ 'mail_manager_using_variable'|trans }}</h6>
-        <hr>
-        {% for key,val in objects %}
-            <code><var>{{ key }}:</var></code> {{ val }}<br/>
-        {% endfor %}
-    </div>
+    {% if objects %}
+        <div class="alert alert-primary code-description">
+            <h6>{{ 'mail_manager_using_variable'|trans }}</h6>
+            <hr>
+            {% for key,val in objects %}
+                <code><var>{{ key }}:</var></code> {{ val }}<br/>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     {# Forms #}
     <div class="content-form">
