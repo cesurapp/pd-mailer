@@ -16,7 +16,11 @@
 {# Content Body #}
 {% block content_body %}
     <!-- Action Button -->
-    <div id="actions"></div>
+    <div id="actions">
+        <div class="btn-group">
+            <a class="btn btn-primary" href="{{ path('admin_mail_template_add') }}" data-tooltip title="{{ 'create_mail_template'|trans }}"><i class="material-icons">add</i></a>
+        </div>
+    </div>
 
     <!-- Table List -->
     <div class="table-responsive">

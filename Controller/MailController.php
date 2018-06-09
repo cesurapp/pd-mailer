@@ -73,11 +73,16 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_TEMPLATEADD")
      */
-    public function addTemplateAction(Request $request, MailLog $mailLog)
+    public function addTemplateAction(Request $request, MailLog $mailLog = null)
     {
+        // Create New Mail Log
+        if ($mailLog === null) {
+            $mailLog = new MailLog();
+        }
+
         // Create Mail Template
         $template = new MailTemplate();
-        $template->setTemplateId($mailLog->getTemplateId());
+        $template->setTemplateId($mailLog->getTemplateId() ?? ' ');
         $template->setSubject($mailLog->getSubject());
 
         // Create Form
@@ -115,7 +120,7 @@ class MailController extends Controller
     /**
      * Edit Templates.
      *
-     * @param Request      $request
+     * @param Request $request
      * @param MailTemplate $mailTemplate
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -162,10 +167,10 @@ class MailController extends Controller
     public function defaultTemplate($templateId)
     {
         // Load Email Template Resource
-        $template = $this->getParameter('kernel.root_dir').'/Admin/Resources/emails/';
+        $template = $this->getParameter('kernel.root_dir') . '/Admin/Resources/emails/';
 
-        if (file_exists($template."{$templateId}.html")) {
-            $template = file_get_contents($template."{$templateId}.html");
+        if (file_exists($template . "{$templateId}.html")) {
+            $template = file_get_contents($template . "{$templateId}.html");
         } else {
             $template = '';
         }
@@ -176,7 +181,7 @@ class MailController extends Controller
     /**
      * Delete Templates.
      *
-     * @param Request      $request
+     * @param Request $request
      * @param MailTemplate $mailTemplate
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -204,7 +209,7 @@ class MailController extends Controller
     /**
      * Active/Deactive Templates.
      *
-     * @param Request      $request
+     * @param Request $request
      * @param MailTemplate $mailTemplate
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -283,8 +288,8 @@ class MailController extends Controller
             $trans->trans('mail_content_type') => $log->getContentType(),
             $trans->trans('date') => date('Y-m-d H:i:s', $log->getDate()->getTimestamp()),
             $trans->trans('mail_reply_to') => $log->getReplyTo(),
-            $trans->trans('mail_header') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())),
-            $trans->trans('mail_status') => $log->getStatus(),
+            $trans->trans('mail_header') => '<code>' . str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())) . '</code>',
+            $trans->trans('mail_status') => $log->getStatus() . ' = ' . $this->swiftEventFilter($log->getStatus()),
             $trans->trans('mail_exception') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getException())),
         ];
 
@@ -332,7 +337,7 @@ class MailController extends Controller
     /**
      * Array Key => Value Implode.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $glue
      *
      * @return array
@@ -347,5 +352,25 @@ class MailController extends Controller
         }
 
         return $imploded;
+    }
+
+    private function swiftEventFilter($event): string
+    {
+        switch ($event) {
+            case \Swift_Events_SendEvent::RESULT_SUCCESS:
+                return $this->get('translator')->trans('RESULT_SUCCESS');
+            case \Swift_Events_SendEvent::RESULT_FAILED:
+                return $this->get('translator')->trans('RESULT_FAILED');
+            case \Swift_Events_SendEvent::RESULT_SPOOLED:
+                return $this->get('translator')->trans('RESULT_SPOOLED');
+            case \Swift_Events_SendEvent::RESULT_PENDING:
+                return $this->get('translator')->trans('RESULT_PENDING');
+            case \Swift_Events_SendEvent::RESULT_TENTATIVE:
+                return $this->get('translator')->trans('RESULT_TENTATIVE');
+            case -1:
+                return $this->get('translator')->trans('RESULT_DELETED');
+        }
+
+        return '';
     }
 }

@@ -6,6 +6,8 @@ admin_mail_template_add:
     path: /settings/mail/add/{id}
     controller: PdMailerBundle:Mail:addTemplate
     methods: [GET, POST]
+    defaults:
+        id: null
 admin_mail_template_edit:
     path: /settings/mail/edit/{id}
     controller: PdMailerBundle:Mail:editTemplate
