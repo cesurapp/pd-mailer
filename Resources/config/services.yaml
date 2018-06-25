@@ -14,4 +14,4 @@ services:
     # Add Menu to Main Navigation
     Pd\MailerBundle\Menu\MainNavListener:
         tags:
-            - { name: kernel.event_listener, event: admin.main.nav, method: onCreate }
+            - { name: kernel.event_listener, event: main_menu.event, method: onCreate }

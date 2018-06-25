@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('sender_address')->defaultValue('pdadmin@example.com')->end()
                 ->scalarNode('sender_name')->defaultValue('pdAdmin')->end()
                 ->integerNode('list_count')->defaultValue(30)->end()
+                ->arrayNode('active_language')->scalarPrototype()->end()->defaultValue(['en'])->end()
             ->end();
 
         return $treeBuilder;

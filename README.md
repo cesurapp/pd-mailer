@@ -50,12 +50,14 @@ template_active: true
 sender_address: 'example@example.com'
 sender_name: 'pdMailer'
 list_count: 30
+active_language: ['tr', 'en']
 ```
 * __logger_active__: Enable mail logs.
 * __template_active__: Enable mail template.
 * __sender_address__: Sender mail adress
 * __sender_name__: Sender Name
 * __list_count__: Log or Template page listing count
+* __active_language__: List of active languages
 
 How to use
 ---

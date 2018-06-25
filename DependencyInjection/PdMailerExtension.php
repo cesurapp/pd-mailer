@@ -46,6 +46,7 @@ class PdMailerExtension extends Extension
         $container->setParameter('pd_mailer.sender_address', $config['sender_address']);
         $container->setParameter('pd_mailer.sender_name', $config['sender_name']);
         $container->setParameter('pd_mailer.list_count', $config['list_count']);
+        $container->setParameter('pd_mailer.active_language', $config['active_language']);
 
         // Load Services
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

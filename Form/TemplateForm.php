@@ -15,8 +15,10 @@
 namespace Pd\MailerBundle\Form;
 
 use Pd\MailerBundle\Entity\MailTemplate;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -24,6 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Intl\Intl;
 
 /**
  * Mail Template Form.
@@ -39,12 +42,10 @@ class TemplateForm extends AbstractType
                 'label' => 'mail_templateid',
                 'label_attr' => ['info' => 'mail_templateid_info'],
             ])
-            ->add('language', LanguageType::class, [
+            ->add('language', ChoiceType::class, [
                 'label' => 'mail_language',
-                'required' => true,
-                'preferred_choices' => [
-                    'tr', 'en', 'de', 'fr', 'ru', 'ar', 'es', 'sv', 'no', 'ga',
-                ],
+                'choices' => $this->getLanguageList($options['container']),
+                'choice_translation_domain' => false
             ])
             ->add('subject', TextType::class, [
                 'label' => 'mail_subject',
@@ -82,6 +83,21 @@ class TemplateForm extends AbstractType
         $resolver
             ->setDefaults([
                 'data_class' => MailTemplate::class,
-            ]);
+            ])
+            ->setRequired('container');
+    }
+
+    /**
+     * Return Active Language List.
+     *
+     * @param ContainerInterface $container
+     *
+     * @return array|bool
+     */
+    public function getLanguageList(ContainerInterface $container)
+    {
+        $allLangs = Intl::getLanguageBundle()->getLanguageNames();
+
+        return array_flip(array_intersect_key($allLangs, array_flip($container->getParameter('pd_mailer.active_language'))));
     }
 }

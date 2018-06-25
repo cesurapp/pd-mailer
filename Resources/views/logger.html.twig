@@ -29,7 +29,7 @@
                 <thead>
                 <tr>
                     <th class="check">
-                        <div class="custom-control custom-checkbox">
+                        <div class="custom-control custom-checkbox custom-control-inline">
                             <input type="checkbox" class="custom-control-input" id="checkall" data-select-all="form">
                             <label class="custom-control-label" for="checkall"></label>
                         </div>
@@ -46,7 +46,7 @@
                 {% for log in maillogs %}
                     <tr>
                         <td class="check">
-                            <div class="custom-control custom-checkbox">
+                            <div class="custom-control custom-checkbox custom-control-inline">
                                 <input type="checkbox" class="custom-control-input check-all" id="c{{ log.id }}" value="{{ log.id }}" name="id[]">
                                 <label class="custom-control-label" for="c{{ log.id }}"></label>
                             </div>

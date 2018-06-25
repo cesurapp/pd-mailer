@@ -39,7 +39,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_TEMPLATELIST")
      */
-    public function listAction(Request $request)
+    public function list(Request $request)
     {
         // Get Query
         $query = $this->getDoctrine()
@@ -73,7 +73,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_TEMPLATEADD")
      */
-    public function addTemplateAction(Request $request, MailLog $mailLog = null)
+    public function addTemplate(Request $request, MailLog $mailLog = null)
     {
         // Create New Mail Log
         if (null === $mailLog) {
@@ -86,7 +86,7 @@ class MailController extends Controller
         $template->setSubject($mailLog->getSubject());
 
         // Create Form
-        $form = $this->createForm(TemplateForm::class, $template);
+        $form = $this->createForm(TemplateForm::class, $template, ['container' => $this->container]);
 
         // Handle Request
         $form->handleRequest($request);
@@ -126,10 +126,10 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_TEMPLATEEDIT")
      */
-    public function editTemplateAction(Request $request, MailTemplate $mailTemplate)
+    public function editTemplate(Request $request, MailTemplate $mailTemplate)
     {
         // Create Form
-        $form = $this->createForm(TemplateForm::class, $mailTemplate);
+        $form = $this->createForm(TemplateForm::class, $mailTemplate, ['container' => $this->container]);
 
         // Handle Request
         $form->handleRequest($request);
@@ -163,7 +163,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_TEMPLATEDELETE")
      */
-    public function deleteTemplateAction(Request $request, MailTemplate $mailTemplate)
+    public function deleteTemplate(Request $request, MailTemplate $mailTemplate)
     {
         // Not Found
         if (null === $mailTemplate) {
@@ -191,7 +191,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_TEMPLATEACTIVE")
      */
-    public function activeTemplateAction(Request $request, MailTemplate $mailTemplate)
+    public function activeTemplate(Request $request, MailTemplate $mailTemplate)
     {
         // Set Status
         $mailTemplate->setStatus(!$mailTemplate->getStatus());
@@ -217,7 +217,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_LOGGER")
      */
-    public function loggerAction(Request $request)
+    public function logger(Request $request)
     {
         // Get Logs
         $query = $this->getDoctrine()
@@ -248,7 +248,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_VIEWLOG")
      */
-    public function viewLogAction(MailLog $log)
+    public function viewLog(MailLog $log)
     {
         // Get Log Manager
         $trans = $this->get('translator');
@@ -282,7 +282,7 @@ class MailController extends Controller
      *
      * @IsGranted("ADMIN_MAIL_LOGDELETE")
      */
-    public function deleteLogAction(Request $request, $mailLog)
+    public function deleteLog(Request $request, $mailLog)
     {
         // Not Found
         if (null === $mailLog && !$request->request->has('id')) {
