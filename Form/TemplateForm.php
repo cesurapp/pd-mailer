@@ -20,13 +20,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Mail Template Form.
@@ -45,7 +44,7 @@ class TemplateForm extends AbstractType
             ->add('language', ChoiceType::class, [
                 'label' => 'mail_language',
                 'choices' => $this->getLanguageList($options['container']),
-                'choice_translation_domain' => false
+                'choice_translation_domain' => false,
             ])
             ->add('subject', TextType::class, [
                 'label' => 'mail_subject',

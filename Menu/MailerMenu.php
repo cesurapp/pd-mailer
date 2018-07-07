@@ -31,7 +31,7 @@ class MailerMenu extends Menu
         // Create Root
         $menu = $this->createRoot('mail_manager')->setChildAttr([
             'class' => 'nav nav-pills',
-            'data-parent' => 'admin_mail_list'
+            'data-parent' => 'admin_mail_list',
         ]);
 
         // Create Menu Items

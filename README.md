@@ -1,10 +1,10 @@
 # pdMailer Bundle
 pdMailer is the SwiftMailer extension is written for pdAdmin. It keeps logs of mail sent by Swiftmailer and provides template interface for mail.
 
-[![Packagist](https://img.shields.io/packagist/dt/doctrine/orm.svg)](https://github.com/rmznpydn/pd-mailer)
-[![Packagist Pre Release](https://img.shields.io/packagist/vpre/symfony/symfony.svg)](https://github.com/rmznpydn/pd-mailer)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/rmznpydn/pd-mailer)
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/symfony/symfony.svg)](https://github.com/rmznpydn/pd-mailer)
+[![Packagist](https://img.shields.io/packagist/dt/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
+[![Github Release](https://img.shields.io/github/release/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
+[![license](https://img.shields.io/github/license/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
 
 Installation
 ---

@@ -112,7 +112,7 @@ class MailController extends Controller
             'form' => $form->createView(),
             'objects' => @unserialize($mailLog->getBody()),
             'title' => 'mail_manager_template_add',
-            'description' => 'mail_manager_template_add_desc'
+            'description' => 'mail_manager_template_add_desc',
         ]);
     }
 
@@ -149,7 +149,7 @@ class MailController extends Controller
             'form' => $form->createView(),
             'objects' => @unserialize($mailTemplate->getTemplateData()),
             'title' => 'mail_manager_template_edit',
-            'description' => 'mail_manager_template_edit_desc'
+            'description' => 'mail_manager_template_edit_desc',
         ]);
     }
 
