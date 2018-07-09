@@ -31,7 +31,9 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('template_active')->defaultTrue()->end()
                 ->scalarNode('sender_address')->defaultValue('pdadmin@example.com')->end()
                 ->scalarNode('sender_name')->defaultValue('pdAdmin')->end()
-                ->integerNode('list_count')->defaultValue(30)->end()
+                ->integerNode('list_count')
+                    ->beforeNormalization()->ifString()->then(function ($val) { return intval($val); })->end()
+                ->end()
                 ->arrayNode('active_language')->scalarPrototype()->end()->defaultValue(['en'])->end()
             ->end();
 
