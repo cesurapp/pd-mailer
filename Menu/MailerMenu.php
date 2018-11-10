@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Menu;
@@ -17,6 +16,11 @@ namespace Pd\MailerBundle\Menu;
 use Pd\MenuBundle\Builder\ItemInterface;
 use Pd\MenuBundle\Builder\Menu;
 
+/**
+ * Mail Menu.
+ *
+ * @author Kerem APAYDIN <kerem@apaydin.me>
+ */
 class MailerMenu extends Menu
 {
     /**
@@ -39,12 +43,12 @@ class MailerMenu extends Menu
             ->addChild('nav_mail_template')
             ->setLabel('nav_mail_template')
             ->setRoute('admin_mail_list')
-            ->setRoles(['ADMIN_MAIL_LIST'])
+            ->setRoles(['ROLE_MAIL_LIST'])
             // Logger
             ->addChildParent('nav_mail_logger')
             ->setLabel('nav_mail_logger')
             ->setRoute('admin_mail_logger')
-            ->setRoles(['ADMIN_MAIL_LIST']);
+            ->setRoles(['ROLE_MAIL_LIST']);
 
         return $menu;
     }

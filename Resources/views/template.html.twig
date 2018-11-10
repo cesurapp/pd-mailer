@@ -1,5 +1,5 @@
 {# Template Parts #}
-{% extends "@Admin/base.html.twig" %}
+{% extends "Admin/base.html.twig" %}
 
 {# Document #}
 {% block head_title %}{{ title(title|trans) }}{% endblock %}
@@ -51,7 +51,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('build/admin/_global/ace.js') }}"></script>
+    <script src="{{ asset('plugin/ace.js', 'admin') }}"></script>
 
     <script type="text/javascript">
       var editor;

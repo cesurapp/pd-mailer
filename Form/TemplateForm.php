@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Form;
@@ -30,7 +29,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Mail Template Form.
  *
- * @author  Ramazan Apaydın <iletisim@ramazanapaydin.com>
+ * @author Kerem APAYDIN <kerem@apaydin.me>
  */
 class TemplateForm extends AbstractType
 {

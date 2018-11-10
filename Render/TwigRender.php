@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Render;
@@ -17,6 +16,11 @@ namespace Pd\MailerBundle\Render;
 use Doctrine\ORM\EntityManagerInterface;
 use Pd\MailerBundle\Entity\MailTemplate;
 
+/**
+ * Twig Render Class.
+ *
+ * @author Kerem APAYDIN <kerem@apaydin.me>
+ */
 class TwigRender implements RenderInterface
 {
     /**
@@ -48,6 +52,17 @@ class TwigRender implements RenderInterface
         $this->defaultLanguage = $defaultLanguage;
     }
 
+    /**
+     * Render Template.
+     *
+     * @param string                    $templateID
+     * @param string                    $language
+     * @param \Swift_Mime_SimpleMessage $message
+     *
+     * @throws \Throwable
+     *
+     * @return bool
+     */
     public function render(string $templateID, string $language, \Swift_Mime_SimpleMessage &$message)
     {
         // Find Template

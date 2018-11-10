@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Controller;
@@ -22,11 +21,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Mail Controller.
+ * Mail Manager.
  *
- * routing : /admin/tools/mail/*
- *
- * @author  Ramazan Apaydın <iletisim@ramazanapaydin.com>
+ * @author Kerem APAYDIN <kerem@apaydin.me>
  */
 class MailController extends Controller
 {
@@ -35,9 +32,9 @@ class MailController extends Controller
      *
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_TEMPLATELIST")
      *
-     * @IsGranted("ADMIN_MAIL_TEMPLATELIST")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function list(Request $request)
     {
@@ -57,7 +54,7 @@ class MailController extends Controller
         // Set Back URL
         $this->get('session')->set('backUrl', $request->getRequestUri());
 
-        // Render
+        // Render Page
         return $this->render('@PdMailer/list.html.twig', [
             'templates' => $pagination,
         ]);
@@ -69,9 +66,9 @@ class MailController extends Controller
      * @param Request $request
      * @param MailLog $mailLog
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_TEMPLATEADD")
      *
-     * @IsGranted("ADMIN_MAIL_TEMPLATEADD")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addTemplate(Request $request, MailLog $mailLog = null)
     {
@@ -108,6 +105,7 @@ class MailController extends Controller
             $this->redirectToRoute('admin_mail_template_edit', ['id' => $template->getId()]);
         }
 
+        // Render Page
         return $this->render('@PdMailer/template.html.twig', [
             'form' => $form->createView(),
             'objects' => @unserialize($mailLog->getBody()),
@@ -122,9 +120,9 @@ class MailController extends Controller
      * @param Request      $request
      * @param MailTemplate $mailTemplate
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_TEMPLATEEDIT")
      *
-     * @IsGranted("ADMIN_MAIL_TEMPLATEEDIT")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editTemplate(Request $request, MailTemplate $mailTemplate)
     {
@@ -145,6 +143,7 @@ class MailController extends Controller
             $this->addFlash('success', 'changes_saved');
         }
 
+        // Render Page
         return $this->render('@PdMailer/template.html.twig', [
             'form' => $form->createView(),
             'objects' => @unserialize($mailTemplate->getTemplateData()),
@@ -159,9 +158,9 @@ class MailController extends Controller
      * @param Request      $request
      * @param MailTemplate $mailTemplate
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_TEMPLATEDELETE")
      *
-     * @IsGranted("ADMIN_MAIL_TEMPLATEDELETE")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteTemplate(Request $request, MailTemplate $mailTemplate)
     {
@@ -178,7 +177,7 @@ class MailController extends Controller
         $em->flush();
 
         // Redirect Back
-        return $this->redirect(($r = $request->headers->get('referer')) ? $r : $this->generateUrl('admin_mail_list'));
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin_mail_list'));
     }
 
     /**
@@ -187,9 +186,9 @@ class MailController extends Controller
      * @param Request      $request
      * @param MailTemplate $mailTemplate
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_TEMPLATEACTIVE")
      *
-     * @IsGranted("ADMIN_MAIL_TEMPLATEACTIVE")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function activeTemplate(Request $request, MailTemplate $mailTemplate)
     {
@@ -205,7 +204,7 @@ class MailController extends Controller
         $this->addFlash('success', 'changes_saved');
 
         // Redirect Back
-        return $this->redirect(($r = $request->headers->get('referer')) ? $r : $this->generateUrl('admin_mail_list'));
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin_mail_list'));
     }
 
     /**
@@ -213,9 +212,9 @@ class MailController extends Controller
      *
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_LOGGER")
      *
-     * @IsGranted("ADMIN_MAIL_LOGGER")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function logger(Request $request)
     {
@@ -234,6 +233,7 @@ class MailController extends Controller
             $request->query->getInt('limit', $this->getParameter('pd_mailer.list_count'))
         );
 
+        // Render Page
         return $this->render('@PdMailer/logger.html.twig', [
             'maillogs' => $mailLog,
         ]);
@@ -244,9 +244,9 @@ class MailController extends Controller
      *
      * @param MailLog $log
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_VIEWLOG")
      *
-     * @IsGranted("ADMIN_MAIL_VIEWLOG")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewLog(MailLog $log)
     {
@@ -278,9 +278,9 @@ class MailController extends Controller
      * @param Request $request
      * @param $mailLog
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @IsGranted("ROLE_MAIL_LOGDELETE")
      *
-     * @IsGranted("ADMIN_MAIL_LOGDELETE")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteLog(Request $request, $mailLog)
     {
@@ -306,7 +306,7 @@ class MailController extends Controller
         }
 
         // Redirect Back
-        return $this->redirect(($r = $request->headers->get('referer')) ? $r : $this->generateUrl('admin_mail_logger'));
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin_mail_logger'));
     }
 
     /**
@@ -317,7 +317,7 @@ class MailController extends Controller
      *
      * @return array
      */
-    private function implodeKeyValue(array $array, $glue = ' - ')
+    private function implodeKeyValue(array $array, $glue = ' - '): array
     {
         $imploded = [];
 
@@ -329,6 +329,13 @@ class MailController extends Controller
         return $imploded;
     }
 
+    /**
+     * Swift Event.
+     *
+     * @param $event
+     *
+     * @return string
+     */
     private function swiftEventFilter($event): string
     {
         switch ($event) {

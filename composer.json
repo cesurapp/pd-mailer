@@ -1,6 +1,7 @@
 {
-  "name": "rmznpydn/pd-mailer",
+  "name": "appaydin/pd-mailer",
   "description": "Symfony Mailer Queue & Templating Bundle",
+  "homepage": "https://github.com/appaydin/pd-mailer",
   "type": "symfony-bundle",
   "license": "MIT",
   "keywords": [
@@ -10,11 +11,10 @@
     "symfony-mailer",
     "mail-templating"
   ],
-  "homepage": "https://github.com/rmznpydn/pd-mailer",
   "authors": [
     {
-      "name": "Ramazan APAYDIN",
-      "homepage": "http://ramazanapaydin.com"
+      "name": "Kerem APAYDIN",
+      "homepage": "http://apaydin.me"
     }
   ],
   "require": {

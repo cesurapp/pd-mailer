@@ -1,10 +1,10 @@
 # pdMailer Bundle
 pdMailer is the SwiftMailer extension is written for pdAdmin. It keeps logs of mail sent by Swiftmailer and provides template interface for mail.
 
-[![Packagist](https://img.shields.io/packagist/dt/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
-[![Github Release](https://img.shields.io/github/release/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
-[![license](https://img.shields.io/github/license/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/rmznpydn/pd-mailer.svg)](https://github.com/rmznpydn/pd-mailer)
+[![Packagist](https://img.shields.io/packagist/dt/appaydin/pd-mailer.svg)](https://github.com/appaydin/pd-mailer)
+[![Github Release](https://img.shields.io/github/release/appaydin/pd-mailer.svg)](https://github.com/appaydin/pd-mailer)
+[![license](https://img.shields.io/github/license/appaydin/pd-mailer.svg)](https://github.com/appaydin/pd-mailer)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/appaydin/pd-mailer.svg)](https://github.com/appaydin/pd-mailer)
 
 Installation
 ---
@@ -17,7 +17,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require rmznpydn/pd-mailer
+$ composer require appaydin/pd-mailer
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -72,8 +72,8 @@ $message = (new PdSwiftMessage)
     ->setTo('example@gmail.com')
     ->setSubject('Subject')
     ->setBody(serialize([
-        'firstname' => 'Ramazan',
-        'lastname' => 'Apaydın'
+        'firstname' => 'Kerem',
+        'lastname' => 'APAYDIN'
     ]), 'text/html'); // Data to be used in the template. - Required
 
 // Send Mail

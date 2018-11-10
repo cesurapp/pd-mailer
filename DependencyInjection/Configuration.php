@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\DependencyInjection;
@@ -32,7 +31,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('sender_address')->defaultValue('pdadmin@example.com')->end()
                 ->scalarNode('sender_name')->defaultValue('pdAdmin')->end()
                 ->integerNode('list_count')
-                    ->beforeNormalization()->ifString()->then(function ($val) { return intval($val); })->end()
+                    ->beforeNormalization()->ifString()->then(function ($val) { return (int) $val; })->end()
                 ->end()
                 ->arrayNode('active_language')->scalarPrototype()->end()->defaultValue(['en'])->end()
             ->end();

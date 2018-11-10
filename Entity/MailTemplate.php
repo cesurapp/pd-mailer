@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Entity;
@@ -18,10 +17,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * MailTemplate.
+ * Mail Templates.
  *
  * @ORM\Table(name="mail_template")
  * @ORM\Entity(repositoryClass="Pd\MailerBundle\Repository\MailTemplateRepository")
+ *
+ * @author Kerem APAYDIN <kerem@apaydin.me>
  */
 class MailTemplate
 {

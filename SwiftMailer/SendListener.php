@@ -1,15 +1,14 @@
 <?php
 
 /**
- * This file is part of the pdAdmin pdMailer package.
+ * This file is part of the pd-admin pd-mailer package.
  *
- * @package     pdMailer
+ * @package     pd-mailer
  *
- * @author      Ramazan APAYDIN <iletisim@ramazanapaydin.com>
- * @copyright   Copyright (c) 2018 Ramazan APAYDIN
  * @license     LICENSE
+ * @author      Kerem APAYDIN <kerem@apaydin.me>
  *
- * @link        https://github.com/rmznpydn/pd-mailer
+ * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\SwiftMailer;
@@ -23,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Swiftmailer Plugin.
  *
- * @author  Ramazan Apaydın <iletisim@ramazanapaydin.com>
+ * @author Kerem APAYDIN <kerem@apaydin.me>
  */
 class SendListener implements \Swift_Events_SendListener, \Swift_Events_TransportExceptionListener
 {
@@ -90,7 +89,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
             }
 
             // Set Message From
-            if (count($this->msg->getFrom()) < 1) {
+            if (\count($this->msg->getFrom()) < 1) {
                 $evt->getMessage()->setFrom(
                     $this->container->getParameter('pd_mailer.sender_address'),
                     $this->container->getParameter('pd_mailer.sender_name')
@@ -114,7 +113,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
     public function sendPerformed(\Swift_Events_SendEvent $evt)
     {
         if ($this->container->getParameter('pd_mailer.logger_active')) {
-            if (!in_array($evt->getResult(), [\Swift_Events_SendEvent::RESULT_PENDING, \Swift_Events_SendEvent::RESULT_SPOOLED], true)) {
+            if (!\in_array($evt->getResult(), [\Swift_Events_SendEvent::RESULT_PENDING, \Swift_Events_SendEvent::RESULT_SPOOLED], true)) {
                 $this->logUpdate($evt->getMessage(), $evt->getResult());
             }
         }
