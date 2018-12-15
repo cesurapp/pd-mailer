@@ -43,12 +43,12 @@ class MailerMenu extends Menu
             ->addChild('nav_mail_template')
             ->setLabel('nav_mail_template')
             ->setRoute('admin_mail_list')
-            ->setRoles(['ROLE_MAIL_LIST'])
+            ->setRoles(['ROLE_MAIL_TEMPLATELIST'])
             // Logger
             ->addChildParent('nav_mail_logger')
             ->setLabel('nav_mail_logger')
             ->setRoute('admin_mail_logger')
-            ->setRoles(['ROLE_MAIL_LIST']);
+            ->setRoles(['ROLE_MAIL_LOGGER']);
 
         return $menu;
     }

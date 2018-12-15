@@ -14,7 +14,7 @@
 namespace Pd\MailerBundle\Form;
 
 use Pd\MailerBundle\Entity\MailTemplate;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -96,6 +96,6 @@ class TemplateForm extends AbstractType
     {
         $allLangs = Intl::getLanguageBundle()->getLanguageNames();
 
-        return array_flip(array_intersect_key($allLangs, array_flip($container->getParameter('pd_mailer.active_language'))));
+        return array_flip(array_intersect_key($allLangs, array_flip($container->get('parameter_bag')->get('pd_mailer.active_language'))));
     }
 }

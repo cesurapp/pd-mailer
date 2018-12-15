@@ -13,11 +13,12 @@
 
 namespace Pd\MailerBundle\Controller;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Pd\MailerBundle\Entity\MailLog;
 use Pd\MailerBundle\Entity\MailTemplate;
 use Pd\MailerBundle\Form\TemplateForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Kerem APAYDIN <kerem@apaydin.me>
  */
-class MailController extends Controller
+class MailController extends AbstractController
 {
     /**
      * List Mail Templates.
@@ -36,7 +37,7 @@ class MailController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function list(Request $request)
+    public function list(Request $request, PaginatorInterface $paginator)
     {
         // Get Query
         $query = $this->getDoctrine()
@@ -44,8 +45,7 @@ class MailController extends Controller
             ->createQueryBuilder('m');
 
         // Get Result
-        $pagination = $this->get('knp_paginator');
-        $pagination = $pagination->paginate(
+        $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             $request->query->getInt('limit', $this->getParameter('pd_mailer.list_count'))
@@ -216,7 +216,7 @@ class MailController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function logger(Request $request)
+    public function logger(Request $request, PaginatorInterface $paginator)
     {
         // Get Logs
         $query = $this->getDoctrine()
@@ -226,8 +226,7 @@ class MailController extends Controller
             ->getQuery();
 
         // Get Result
-        $pagination = $this->get('knp_paginator');
-        $mailLog = $pagination->paginate(
+        $mailLog = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             $request->query->getInt('limit', $this->getParameter('pd_mailer.list_count'))
