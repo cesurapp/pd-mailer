@@ -41,6 +41,9 @@ class PdMailerExtension extends Extension
 
         // Set Parameters
         $container->setParameter('pd_mailer.logger_active', $config['logger_active']);
+        $container->setParameter('pd_mailer.mail_log_class', $config['mail_log_class']);
+        $container->setParameter('pd_mailer.mail_template_class', $config['mail_template_class']);
+        $container->setParameter('pd_mailer.mail_template_type', $config['mail_template_type']);
         $container->setParameter('pd_mailer.template_active', $config['template_active']);
         $container->setParameter('pd_mailer.sender_address', $config['sender_address']);
         $container->setParameter('pd_mailer.sender_name', $config['sender_name']);

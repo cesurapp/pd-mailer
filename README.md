@@ -58,6 +58,9 @@ active_language: ['tr', 'en']
 * __sender_name__: Sender Name
 * __list_count__: Log or Template page listing count
 * __active_language__: List of active languages
+* __mail_log_class__: Mail log entity class
+* __mail_template_class__: Mail template entity class
+* __mail_template_type__: Mail template form type
 
 How to use
 ---

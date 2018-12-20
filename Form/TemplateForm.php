@@ -15,6 +15,7 @@ namespace Pd\MailerBundle\Form;
 
 use Pd\MailerBundle\Entity\MailTemplate;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -42,7 +43,7 @@ class TemplateForm extends AbstractType
             ])
             ->add('language', ChoiceType::class, [
                 'label' => 'mail_language',
-                'choices' => $this->getLanguageList($options['container']),
+                'choices' => $this->getLanguageList($options['parameters']),
                 'choice_translation_domain' => false,
             ])
             ->add('subject', TextType::class, [
@@ -79,23 +80,21 @@ class TemplateForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setDefaults([
-                'data_class' => MailTemplate::class,
-            ])
-            ->setRequired('container');
+            ->setDefaults(['data_class' => MailTemplate::class])
+            ->setRequired('parameters');
     }
 
     /**
      * Return Active Language List.
      *
-     * @param ContainerInterface $container
+     * @param ParameterBagInterface $bag
      *
      * @return array|bool
      */
-    public function getLanguageList(ContainerInterface $container)
+    public function getLanguageList(ParameterBagInterface $bag)
     {
         $allLangs = Intl::getLanguageBundle()->getLanguageNames();
 
-        return array_flip(array_intersect_key($allLangs, array_flip($container->get('parameter_bag')->get('pd_mailer.active_language'))));
+        return array_flip(array_intersect_key($allLangs, array_flip($bag->get('pd_mailer.active_language'))));
     }
 }

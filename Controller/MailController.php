@@ -19,7 +19,9 @@ use Pd\MailerBundle\Entity\MailTemplate;
 use Pd\MailerBundle\Form\TemplateForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Mail Manager.
@@ -41,7 +43,7 @@ class MailController extends AbstractController
     {
         // Get Query
         $query = $this->getDoctrine()
-            ->getRepository(MailTemplate::class)
+            ->getRepository($this->getParameter('pd_mailer.mail_template_class'))
             ->createQueryBuilder('m');
 
         // Get Result
@@ -70,20 +72,28 @@ class MailController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addTemplate(Request $request, MailLog $mailLog = null)
+    public function addTemplate(Request $request, ParameterBagInterface $bag, $id = null)
     {
+        // Find Template
+        $mailLog = $this
+            ->getDoctrine()
+            ->getRepository($this->getParameter('pd_mailer.mail_log_class'))
+            ->findOneBy(['id' => $id]);
+
         // Create New Mail Log
         if (null === $mailLog) {
-            $mailLog = new MailLog();
+            $class = $this->getParameter('pd_mailer.mail_log_class');
+            $mailLog = new $class;
         }
 
         // Create Mail Template
-        $template = new MailTemplate();
+        $class = $this->getParameter('pd_mailer.mail_template_class');
+        $template = new $class;
         $template->setTemplateId($mailLog->getTemplateId() ?? ' ');
         $template->setSubject($mailLog->getSubject());
 
         // Create Form
-        $form = $this->createForm(TemplateForm::class, $template, ['container' => $this->container]);
+        $form = $this->createForm($this->getParameter('pd_mailer.mail_template_type'), $template, ['parameters' => $bag]);
 
         // Handle Request
         $form->handleRequest($request);
@@ -117,17 +127,24 @@ class MailController extends AbstractController
     /**
      * Edit Templates.
      *
-     * @param Request      $request
+     * @param Request $request
      * @param MailTemplate $mailTemplate
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEEDIT")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editTemplate(Request $request, MailTemplate $mailTemplate)
+    public function editTemplate(Request $request, ParameterBagInterface $bag, $id)
     {
+        // Find Template
+        $mailTemplate = $this
+            ->getDoctrine()
+            ->getRepository($this->getParameter('pd_mailer.mail_template_class'))
+            ->findOneBy(['id' => $id]);
+        if (!$mailTemplate) throw $this->createNotFoundException();
+
         // Create Form
-        $form = $this->createForm(TemplateForm::class, $mailTemplate, ['container' => $this->container]);
+        $form = $this->createForm($this->getParameter('pd_mailer.mail_template_type'), $mailTemplate, ['parameters' => $bag]);
 
         // Handle Request
         $form->handleRequest($request);
@@ -155,15 +172,21 @@ class MailController extends AbstractController
     /**
      * Delete Templates.
      *
-     * @param Request      $request
+     * @param Request $request
      * @param MailTemplate $mailTemplate
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEDELETE")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteTemplate(Request $request, MailTemplate $mailTemplate)
+    public function deleteTemplate(Request $request, $id)
     {
+        // Find Template
+        $mailTemplate = $this
+            ->getDoctrine()
+            ->getRepository($this->getParameter('pd_mailer.mail_template_class'))
+            ->findOneBy(['id' => $id]);
+
         // Not Found
         if (null === $mailTemplate) {
             $this->addFlash('error', 'sorry_not_existing');
@@ -183,15 +206,22 @@ class MailController extends AbstractController
     /**
      * Active/Deactive Templates.
      *
-     * @param Request      $request
+     * @param Request $request
      * @param MailTemplate $mailTemplate
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEACTIVE")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function activeTemplate(Request $request, MailTemplate $mailTemplate)
+    public function activeTemplate(Request $request, $id)
     {
+        // Find Template
+        $mailTemplate = $this
+            ->getDoctrine()
+            ->getRepository($this->getParameter('pd_mailer.mail_template_class'))
+            ->findOneBy(['id' => $id]);
+        if (!$mailTemplate) throw $this->createNotFoundException();
+
         // Set Status
         $mailTemplate->setStatus(!$mailTemplate->getStatus());
 
@@ -220,7 +250,7 @@ class MailController extends AbstractController
     {
         // Get Logs
         $query = $this->getDoctrine()
-            ->getRepository(MailLog::class)
+            ->getRepository($this->getParameter('pd_mailer.mail_log_class'))
             ->createQueryBuilder('m')
             ->orderBy('m.id', 'DESC')
             ->getQuery();
@@ -247,24 +277,28 @@ class MailController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewLog(MailLog $log)
+    public function viewLog(TranslatorInterface $translator, $id)
     {
-        // Get Log Manager
-        $trans = $this->get('translator');
+        // Find Template
+        $log = $this
+            ->getDoctrine()
+            ->getRepository($this->getParameter('pd_mailer.mail_log_class'))
+            ->findOneBy(['id' => $id]);
+        if (!$log) throw $this->createNotFoundException();
 
         $data = [
-            $trans->trans('mail_templateid') => $log->getTemplateId(),
-            $trans->trans('mail_mid') => $log->getMailId(),
-            $trans->trans('mail_to') => implode(PHP_EOL, $this->implodeKeyValue($log->getTo(), ' -> ')),
-            $trans->trans('mail_from') => implode(PHP_EOL, $this->implodeKeyValue($log->getFrom(), ' -> ')),
-            $trans->trans('mail_subject') => $log->getSubject(),
-            $trans->trans('mail_language') => $log->getLanguage(),
-            $trans->trans('mail_content_type') => $log->getContentType(),
-            $trans->trans('date') => date('Y-m-d H:i:s', $log->getDate()->getTimestamp()),
-            $trans->trans('mail_reply_to') => $log->getReplyTo(),
-            $trans->trans('mail_header') => '<code>'.str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())).'</code>',
-            $trans->trans('mail_status') => $log->getStatus().' = '.$this->swiftEventFilter($log->getStatus()),
-            $trans->trans('mail_exception') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getException())),
+            $translator->trans('mail_templateid') => $log->getTemplateId(),
+            $translator->trans('mail_mid') => $log->getMailId(),
+            $translator->trans('mail_to') => implode(PHP_EOL, $this->implodeKeyValue($log->getTo(), ' -> ')),
+            $translator->trans('mail_from') => implode(PHP_EOL, $this->implodeKeyValue($log->getFrom(), ' -> ')),
+            $translator->trans('mail_subject') => $log->getSubject(),
+            $translator->trans('mail_language') => $log->getLanguage(),
+            $translator->trans('mail_content_type') => $log->getContentType(),
+            $translator->trans('date') => date('Y-m-d H:i:s', $log->getDate()->getTimestamp()),
+            $translator->trans('mail_reply_to') => $log->getReplyTo(),
+            $translator->trans('mail_header') => '<code>' . str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())) . '</code>',
+            $translator->trans('mail_status') => $log->getStatus() . ' = ' . $this->swiftEventFilter($translator, $log->getStatus()),
+            $translator->trans('mail_exception') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getException())),
         ];
 
         // JSON Response
@@ -295,9 +329,9 @@ class MailController extends AbstractController
 
         // Remove Mail Log
         if ($mailLog) {
-            $em = $this->get('doctrine.orm.entity_manager');
+            $em = $this->getDoctrine()->getManager();
             $em->createQueryBuilder('')
-                ->delete(MailLog::class, 'log')
+                ->delete($this->getParameter('pd_mailer.mail_log_class'), 'log')
                 ->add('where', $em->getExpressionBuilder()->in('log.id', ':logId'))
                 ->setParameter(':logId', $mailLog)
                 ->getQuery()
@@ -311,7 +345,7 @@ class MailController extends AbstractController
     /**
      * Array Key => Value Implode.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $glue
      *
      * @return array
@@ -335,21 +369,21 @@ class MailController extends AbstractController
      *
      * @return string
      */
-    private function swiftEventFilter($event): string
+    private function swiftEventFilter(TranslatorInterface $translator, $event): string
     {
         switch ($event) {
             case \Swift_Events_SendEvent::RESULT_SUCCESS:
-                return $this->get('translator')->trans('RESULT_SUCCESS');
+                return $translator->trans('RESULT_SUCCESS');
             case \Swift_Events_SendEvent::RESULT_FAILED:
-                return $this->get('translator')->trans('RESULT_FAILED');
+                return $translator->trans('RESULT_FAILED');
             case \Swift_Events_SendEvent::RESULT_SPOOLED:
-                return $this->get('translator')->trans('RESULT_SPOOLED');
+                return $translator->trans('RESULT_SPOOLED');
             case \Swift_Events_SendEvent::RESULT_PENDING:
-                return $this->get('translator')->trans('RESULT_PENDING');
+                return $translator->trans('RESULT_PENDING');
             case \Swift_Events_SendEvent::RESULT_TENTATIVE:
-                return $this->get('translator')->trans('RESULT_TENTATIVE');
+                return $translator->trans('RESULT_TENTATIVE');
             case -1:
-                return $this->get('translator')->trans('RESULT_DELETED');
+                return $translator->trans('RESULT_DELETED');
         }
 
         return '';

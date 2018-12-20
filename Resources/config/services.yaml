@@ -16,6 +16,11 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
+    # Swiftmailer Listener Plugin
+    Pd\MailerBundle\SwiftMailer\SendListener:
+        tags:
+            - { name: swiftmailer.default.plugin }
+
     # Add Menu to Main Navigation
     Pd\MailerBundle\Menu\MainNavListener:
         tags:

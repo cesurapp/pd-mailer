@@ -17,7 +17,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pd\MailerBundle\Entity\MailLog;
 use Pd\MailerBundle\Render\RenderInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface;
 use Swift_Events_TransportExceptionEvent;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Swiftmailer Plugin.
@@ -32,9 +36,14 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
     private $entityManager;
 
     /**
-     * @var ContainerInterface
+     * @var ParameterBagInterface
      */
-    private $container;
+    private $bag;
+
+    /**
+     * @var RequestStack
+     */
+    private $request;
 
     /**
      * @var RenderInterface
@@ -53,13 +62,15 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param ContainerInterface     $container
-     * @param RenderInterface        $engine
+     * @param ParameterBagInterface $bag
+     * @param RequestStack $request
+     * @param RenderInterface $engine
      */
-    public function __construct(EntityManagerInterface $entityManager, ContainerInterface $container, RenderInterface $engine)
+    public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $bag, RequestStack $request, RenderInterface $engine)
     {
         $this->entityManager = $entityManager;
-        $this->container = $container;
+        $this->bag = $bag;
+        $this->request = $request;
         $this->engine = $engine;
     }
 
@@ -74,7 +85,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
     {
         if (\Swift_Events_SendEvent::RESULT_PENDING === $evt->getResult() && (null === $this->msg)) {
             $this->msg = $evt->getMessage();
-            $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale() ?? 'en';
+            $locale = $this->request->getCurrentRequest()->getLocale() ?? 'en';
 
             // Find & Remove Template ID
             $templateID = null;
@@ -84,21 +95,21 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
             }
 
             // Create Log
-            if ($this->container->get('parameter_bag')->get('pd_mailer.logger_active')) {
+            if ($this->bag->get('pd_mailer.logger_active')) {
                 $this->logCreate($evt->getMessage(), $evt->getResult(), $templateID, $locale);
             }
 
             // Set Message From
             if (\count($this->msg->getFrom()) < 1) {
                 $evt->getMessage()->setFrom(
-                    $this->container->get('parameter_bag')->get('pd_mailer.sender_address'),
-                    $this->container->get('parameter_bag')->get('pd_mailer.sender_name')
+                    $this->bag->get('pd_mailer.sender_address'),
+                    $this->bag->get('pd_mailer.sender_name')
                 );
             }
 
             // Render Template
             if (null !== $templateID) {
-                if ($this->container->get('parameter_bag')->get('pd_mailer.logger_active')) {
+                if ($this->bag->get('pd_mailer.logger_active')) {
                     $this->engine->render($templateID, $locale, $this->msg);
                 }
             }
@@ -112,7 +123,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
      */
     public function sendPerformed(\Swift_Events_SendEvent $evt)
     {
-        if ($this->container->get('parameter_bag')->get('pd_mailer.logger_active')) {
+        if ($this->bag->get('pd_mailer.logger_active')) {
             if (!\in_array($evt->getResult(), [\Swift_Events_SendEvent::RESULT_PENDING, \Swift_Events_SendEvent::RESULT_SPOOLED], true)) {
                 $this->logUpdate($evt->getMessage(), $evt->getResult());
             }
@@ -126,10 +137,10 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
      */
     public function exceptionThrown(Swift_Events_TransportExceptionEvent $evt)
     {
-        if ($this->container->get('parameter_bag')->get('pd_mailer.logger_active')) {
+        if ($this->bag->get('pd_mailer.logger_active')) {
             // Update Data
             $this->log->setStatus(\Swift_Events_SendEvent::RESULT_FAILED);
-            $this->log->addException($evt->getException()->getMessage().PHP_EOL);
+            $this->log->addException($evt->getException()->getMessage() . PHP_EOL);
 
             // Update
             $this->entityManager->persist($this->log);
@@ -155,7 +166,8 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
         }
 
         // Create Log
-        $this->log = new MailLog();
+        $class = $this->bag->get('pd_mailer.mail_log_class');
+        $this->log = new $class;
         $this->log->setMailId($message->getId());
         $this->log->setFrom($message->getFrom());
         $this->log->setTo($message->getTo());
