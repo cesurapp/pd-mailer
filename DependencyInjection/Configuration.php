@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder('pd_mailer');
         $rootNode = $treeBuilder->root('pd_mailer');
 
         // Set Configuration
