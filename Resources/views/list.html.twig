@@ -1,5 +1,5 @@
 {# Template Parts #}
-{% extends "Admin/base.html.twig" %}
+{% extends base_template %}
 
 {# Document #}
 {% block head_title %}{{ title('mail_manager_list'|trans) }}{% endblock %}
@@ -15,13 +15,6 @@
 
 {# Content Body #}
 {% block content_body %}
-    <!-- Action Button -->
-    <div id="actions">
-        <div class="btn-group">
-            <a class="btn btn-primary" href="{{ path('admin_mail_template_add') }}" data-tooltip title="{{ 'create_mail_template'|trans }}"><i class="material-icons">add</i></a>
-        </div>
-    </div>
-
     <!-- Table List -->
     <div class="table-responsive">
         <table class="table table-hover">

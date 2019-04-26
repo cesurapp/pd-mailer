@@ -61,6 +61,8 @@ active_language: ['tr', 'en']
 * __mail_log_class__: Mail log entity class
 * __mail_template_class__: Mail template entity class
 * __mail_template_type__: Mail template form type
+* __menu_root_name__: Main menu event name
+* __menu_name__: Parent menu name
 
 How to use
 ---

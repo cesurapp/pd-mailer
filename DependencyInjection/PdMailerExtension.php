@@ -17,6 +17,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Pd\MailerBundle\Menu\MainNavListener;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -28,7 +29,7 @@ class PdMailerExtension extends Extension
     /**
      * Load Bundle Config and Services.
      *
-     * @param array            $configs
+     * @param array $configs
      * @param ContainerBuilder $container
      *
      * @throws \Exception
@@ -49,9 +50,20 @@ class PdMailerExtension extends Extension
         $container->setParameter('pd_mailer.sender_name', $config['sender_name']);
         $container->setParameter('pd_mailer.list_count', $config['list_count']);
         $container->setParameter('pd_mailer.active_language', $config['active_language']);
+        $container->setParameter('pd_mailer.base_template', $config['base_template']);
 
         // Load Services
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+
+        // Replace Service Tags
+        $menuListener = $container->getDefinition(MainNavListener::class);
+        $tags = $menuListener->getTag('kernel.event_listener');
+        $tags[0]['event'] = $config['menu_root_name'] . '.event';
+        $menuListener
+            ->setTags([
+                'kernel.event_listener' => $tags
+            ])
+            ->setArguments([$config['menu_name']]);
     }
 }

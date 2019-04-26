@@ -59,6 +59,7 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/list.html.twig', [
             'templates' => $pagination,
+            'base_template' => $this->getParameter('pd_mailer.base_template')
         ]);
     }
 
@@ -121,6 +122,7 @@ class MailController extends AbstractController
             'objects' => @unserialize($mailLog->getBody()),
             'title' => 'mail_manager_template_add',
             'description' => 'mail_manager_template_add_desc',
+            'base_template' => $this->getParameter('pd_mailer.base_template')
         ]);
     }
 
@@ -166,6 +168,7 @@ class MailController extends AbstractController
             'objects' => @unserialize($mailTemplate->getTemplateData()),
             'title' => 'mail_manager_template_edit',
             'description' => 'mail_manager_template_edit_desc',
+            'base_template' => $this->getParameter('pd_mailer.base_template')
         ]);
     }
 
@@ -265,6 +268,7 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/logger.html.twig', [
             'maillogs' => $mailLog,
+            'base_template' => $this->getParameter('pd_mailer.base_template')
         ]);
     }
 

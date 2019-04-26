@@ -22,12 +22,22 @@ use Pd\MenuBundle\Event\PdMenuEvent;
  */
 class MainNavListener
 {
+    /**
+     * @var string
+     */
+    private $navName;
+
+    public function __construct(string $navName)
+    {
+        $this->navName = $navName;
+    }
+
     public function onCreate(PdMenuEvent $event)
     {
         // Get Menu Items
         $menu = $event->getMenu();
 
-        $menu['nav_config']
+        $menu[$this->navName]
             ->addChild('nav_mail_manager', 30)
             ->setLabel('nav_mail_manager')
             ->setRoute('admin_mail_list')
