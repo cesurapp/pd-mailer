@@ -4,10 +4,8 @@
  * This file is part of the pd-admin pd-mailer package.
  *
  * @package     pd-mailer
- *
  * @license     LICENSE
  * @author      Kerem APAYDIN <kerem@apaydin.me>
- *
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -16,11 +14,8 @@ namespace Pd\MailerBundle\SwiftMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Pd\MailerBundle\Entity\MailLog;
 use Pd\MailerBundle\Render\RenderInterface;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestInterface;
 use Swift_Events_TransportExceptionEvent;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -62,9 +57,9 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param ParameterBagInterface $bag
-     * @param RequestStack $request
-     * @param RenderInterface $engine
+     * @param ParameterBagInterface  $bag
+     * @param RequestStack           $request
+     * @param RenderInterface        $engine
      */
     public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $bag, RequestStack $request, RenderInterface $engine)
     {
@@ -140,7 +135,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
         if ($this->bag->get('pd_mailer.logger_active')) {
             // Update Data
             $this->log->setStatus(\Swift_Events_SendEvent::RESULT_FAILED);
-            $this->log->addException($evt->getException()->getMessage() . PHP_EOL);
+            $this->log->addException($evt->getException()->getMessage().PHP_EOL);
 
             // Update
             $this->entityManager->persist($this->log);
@@ -167,7 +162,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
         // Create Log
         $class = $this->bag->get('pd_mailer.mail_log_class');
-        $this->log = new $class;
+        $this->log = new $class();
         $this->log->setMailId($message->getId());
         $this->log->setFrom($message->getFrom());
         $this->log->setTo($message->getTo());

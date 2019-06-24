@@ -4,23 +4,20 @@
  * This file is part of the pd-admin pd-mailer package.
  *
  * @package     pd-mailer
- *
  * @license     LICENSE
  * @author      Kerem APAYDIN <kerem@apaydin.me>
- *
  * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Controller;
 
 use Knp\Component\Pager\PaginatorInterface;
-use Pd\MailerBundle\Entity\MailLog;
-use Pd\MailerBundle\Entity\MailTemplate;
-use Pd\MailerBundle\Form\TemplateForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -33,13 +30,14 @@ class MailController extends AbstractController
     /**
      * List Mail Templates.
      *
-     * @param Request $request
+     * @param Request            $request
+     * @param PaginatorInterface $paginator
      *
      * @IsGranted("ROLE_MAIL_TEMPLATELIST")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function list(Request $request, PaginatorInterface $paginator)
+    public function list(Request $request, PaginatorInterface $paginator): Response
     {
         // Get Query
         $query = $this->getDoctrine()
@@ -59,21 +57,22 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/list.html.twig', [
             'templates' => $pagination,
-            'base_template' => $this->getParameter('pd_mailer.base_template')
+            'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
     }
 
     /**
      * Add Templates.
      *
-     * @param Request $request
-     * @param MailLog $mailLog
+     * @param Request               $request
+     * @param ParameterBagInterface $bag
+     * @param null                  $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEADD")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function addTemplate(Request $request, ParameterBagInterface $bag, $id = null)
+    public function addTemplate(Request $request, ParameterBagInterface $bag, $id = null): Response
     {
         // Find Template
         $mailLog = $this
@@ -84,12 +83,12 @@ class MailController extends AbstractController
         // Create New Mail Log
         if (null === $mailLog) {
             $class = $this->getParameter('pd_mailer.mail_log_class');
-            $mailLog = new $class;
+            $mailLog = new $class();
         }
 
         // Create Mail Template
         $class = $this->getParameter('pd_mailer.mail_template_class');
-        $template = new $class;
+        $template = new $class();
         $template->setTemplateId($mailLog->getTemplateId() ?? ' ');
         $template->setSubject($mailLog->getSubject());
 
@@ -119,32 +118,34 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/template.html.twig', [
             'form' => $form->createView(),
-            'objects' => @unserialize($mailLog->getBody()),
+            'objects' => @unserialize($mailLog->getBody(), null),
             'title' => 'mail_manager_template_add',
             'description' => 'mail_manager_template_add_desc',
-            'base_template' => $this->getParameter('pd_mailer.base_template')
+            'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
     }
 
     /**
      * Edit Templates.
      *
-     * @param Request $request
-     * @param MailTemplate $mailTemplate
+     * @param Request               $request
+     * @param ParameterBagInterface $bag
+     * @param $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEEDIT")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function editTemplate(Request $request, ParameterBagInterface $bag, $id)
+    public function editTemplate(Request $request, ParameterBagInterface $bag, $id): Response
     {
         // Find Template
         $mailTemplate = $this
             ->getDoctrine()
             ->getRepository($this->getParameter('pd_mailer.mail_template_class'))
             ->findOneBy(['id' => $id]);
-        if (!$mailTemplate) throw $this->createNotFoundException();
-
+        if (!$mailTemplate) {
+            throw $this->createNotFoundException();
+        }
         // Create Form
         $form = $this->createForm($this->getParameter('pd_mailer.mail_template_type'), $mailTemplate, ['parameters' => $bag]);
 
@@ -165,10 +166,10 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/template.html.twig', [
             'form' => $form->createView(),
-            'objects' => @unserialize($mailTemplate->getTemplateData()),
+            'objects' => @unserialize($mailTemplate->getTemplateData(), null),
             'title' => 'mail_manager_template_edit',
             'description' => 'mail_manager_template_edit_desc',
-            'base_template' => $this->getParameter('pd_mailer.base_template')
+            'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
     }
 
@@ -176,13 +177,13 @@ class MailController extends AbstractController
      * Delete Templates.
      *
      * @param Request $request
-     * @param MailTemplate $mailTemplate
+     * @param $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEDELETE")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function deleteTemplate(Request $request, $id)
+    public function deleteTemplate(Request $request, $id): Response
     {
         // Find Template
         $mailTemplate = $this
@@ -203,28 +204,29 @@ class MailController extends AbstractController
         $em->flush();
 
         // Redirect Back
-        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin_mail_list'));
+        return $this->redirect($request->headers->get('referer', $this->generateUrl('admin_mail_list')));
     }
 
     /**
      * Active/Deactive Templates.
      *
      * @param Request $request
-     * @param MailTemplate $mailTemplate
+     * @param $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEACTIVE")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function activeTemplate(Request $request, $id)
+    public function activeTemplate(Request $request, $id): Response
     {
         // Find Template
         $mailTemplate = $this
             ->getDoctrine()
             ->getRepository($this->getParameter('pd_mailer.mail_template_class'))
             ->findOneBy(['id' => $id]);
-        if (!$mailTemplate) throw $this->createNotFoundException();
-
+        if (!$mailTemplate) {
+            throw $this->createNotFoundException();
+        }
         // Set Status
         $mailTemplate->setStatus(!$mailTemplate->getStatus());
 
@@ -237,19 +239,20 @@ class MailController extends AbstractController
         $this->addFlash('success', 'changes_saved');
 
         // Redirect Back
-        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin_mail_list'));
+        return $this->redirect($request->headers->get('referer', $this->generateUrl('admin_mail_list')));
     }
 
     /**
      * View Mail Logs.
      *
-     * @param Request $request
+     * @param Request            $request
+     * @param PaginatorInterface $paginator
      *
      * @IsGranted("ROLE_MAIL_LOGGER")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function logger(Request $request, PaginatorInterface $paginator)
+    public function logger(Request $request, PaginatorInterface $paginator): Response
     {
         // Get Logs
         $query = $this->getDoctrine()
@@ -268,27 +271,30 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/logger.html.twig', [
             'maillogs' => $mailLog,
-            'base_template' => $this->getParameter('pd_mailer.base_template')
+            'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
     }
 
     /**
      * View Log.
      *
-     * @param MailLog $log
+     * @param TranslatorInterface $translator
+     * @param $id
      *
      * @IsGranted("ROLE_MAIL_VIEWLOG")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse
      */
-    public function viewLog(TranslatorInterface $translator, $id)
+    public function viewLog(TranslatorInterface $translator, $id): JsonResponse
     {
         // Find Template
         $log = $this
             ->getDoctrine()
             ->getRepository($this->getParameter('pd_mailer.mail_log_class'))
             ->findOneBy(['id' => $id]);
-        if (!$log) throw $this->createNotFoundException();
+        if (!$log) {
+            throw $this->createNotFoundException();
+        }
 
         $data = [
             $translator->trans('mail_templateid') => $log->getTemplateId(),
@@ -300,8 +306,8 @@ class MailController extends AbstractController
             $translator->trans('mail_content_type') => $log->getContentType(),
             $translator->trans('date') => date('Y-m-d H:i:s', $log->getDate()->getTimestamp()),
             $translator->trans('mail_reply_to') => $log->getReplyTo(),
-            $translator->trans('mail_header') => '<code>' . str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())) . '</code>',
-            $translator->trans('mail_status') => $log->getStatus() . ' = ' . $this->swiftEventFilter($translator, $log->getStatus()),
+            $translator->trans('mail_header') => '<code>'.str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())).'</code>',
+            $translator->trans('mail_status') => $log->getStatus().' = '.$this->swiftEventFilter($translator, $log->getStatus()),
             $translator->trans('mail_exception') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getException())),
         ];
 
@@ -317,9 +323,9 @@ class MailController extends AbstractController
      *
      * @IsGranted("ROLE_MAIL_LOGDELETE")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function deleteLog(Request $request, $mailLog)
+    public function deleteLog(Request $request, $mailLog): Response
     {
         // Not Found
         if (null === $mailLog && !$request->request->has('id')) {
@@ -343,13 +349,13 @@ class MailController extends AbstractController
         }
 
         // Redirect Back
-        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin_mail_logger'));
+        return $this->redirect($request->headers->get('referer', $this->generateUrl('admin_mail_logger')));
     }
 
     /**
      * Array Key => Value Implode.
      *
-     * @param array $array
+     * @param array  $array
      * @param string $glue
      *
      * @return array
@@ -369,6 +375,7 @@ class MailController extends AbstractController
     /**
      * Swift Event.
      *
+     * @param TranslatorInterface $translator
      * @param $event
      *
      * @return string

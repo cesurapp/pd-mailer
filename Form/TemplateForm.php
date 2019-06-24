@@ -4,17 +4,14 @@
  * This file is part of the pd-admin pd-mailer package.
  *
  * @package     pd-mailer
- *
  * @license     LICENSE
  * @author      Kerem APAYDIN <kerem@apaydin.me>
- *
  * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Form;
 
 use Pd\MailerBundle\Entity\MailTemplate;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -24,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Intl\Intl;
+use Symfony\Component\Intl\Languages;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -93,8 +90,6 @@ class TemplateForm extends AbstractType
      */
     public function getLanguageList(ParameterBagInterface $bag)
     {
-        $allLangs = Intl::getLanguageBundle()->getLanguageNames();
-
-        return array_flip(array_intersect_key($allLangs, array_flip($bag->get('pd_mailer.active_language'))));
+        return array_flip(array_intersect_key(Languages::getNames(), array_flip($bag->get('pd_mailer.active_language'))));
     }
 }

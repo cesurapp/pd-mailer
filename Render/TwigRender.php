@@ -4,10 +4,8 @@
  * This file is part of the pd-admin pd-mailer package.
  *
  * @package     pd-mailer
- *
  * @license     LICENSE
  * @author      Kerem APAYDIN <kerem@apaydin.me>
- *
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -15,6 +13,7 @@ namespace Pd\MailerBundle\Render;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Pd\MailerBundle\Entity\MailTemplate;
+use Twig\Environment;
 
 /**
  * Twig Render Class.
@@ -24,7 +23,7 @@ use Pd\MailerBundle\Entity\MailTemplate;
 class TwigRender implements RenderInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -41,11 +40,11 @@ class TwigRender implements RenderInterface
     /**
      * TwigRender constructor.
      *
-     * @param \Twig_Environment      $twig
+     * @param Environment            $twig
      * @param EntityManagerInterface $entityManager
      * @param string                 $defaultLanguage
      */
-    public function __construct(\Twig_Environment $twig, EntityManagerInterface $entityManager, string $defaultLanguage)
+    public function __construct(Environment $twig, EntityManagerInterface $entityManager, string $defaultLanguage)
     {
         $this->twig = $twig;
         $this->entityManager = $entityManager;
@@ -63,7 +62,7 @@ class TwigRender implements RenderInterface
      *
      * @return bool
      */
-    public function render(string $templateID, string $language, \Swift_Mime_SimpleMessage &$message)
+    public function render(string $templateID, string $language, &$message)
     {
         // Find Template
         $template = $this->entityManager
@@ -79,7 +78,7 @@ class TwigRender implements RenderInterface
             // Render Body
             try {
                 $message->setBody(
-                    $this->twig->createTemplate($template->getTemplate())->render(unserialize($message->getBody())),
+                    $this->twig->createTemplate($template->getTemplate())->render(unserialize($message->getBody(), null)),
                     $message->getContentType(),
                     $message->getCharset());
             } catch (\Exception $e) {
