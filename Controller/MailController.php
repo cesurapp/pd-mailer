@@ -118,7 +118,7 @@ class MailController extends AbstractController
         // Render Page
         return $this->render('@PdMailer/template.html.twig', [
             'form' => $form->createView(),
-            'objects' => @unserialize($mailLog->getBody(), null),
+            'objects' => @unserialize($mailLog->getBody()),
             'title' => 'mail_manager_template_add',
             'description' => 'mail_manager_template_add_desc',
             'base_template' => $this->getParameter('pd_mailer.base_template'),
