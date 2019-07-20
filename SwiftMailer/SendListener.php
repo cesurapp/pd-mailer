@@ -104,7 +104,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
             // Render Template
             if (null !== $templateID) {
-                if ($this->bag->get('pd_mailer.logger_active')) {
+                if ($this->bag->get('pd_mailer.template_active')) {
                     $this->engine->render($templateID, $locale, $this->msg);
                 }
             }
