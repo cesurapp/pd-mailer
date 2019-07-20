@@ -78,7 +78,7 @@ class TwigRender implements RenderInterface
             // Render Body
             try {
                 $message->setBody(
-                    $this->twig->createTemplate($template->getTemplate())->render(unserialize($message->getBody(), null)),
+                    $this->twig->createTemplate($template->getTemplate())->render(unserialize($message->getBody())),
                     $message->getContentType(),
                     $message->getCharset());
             } catch (\Exception $e) {
