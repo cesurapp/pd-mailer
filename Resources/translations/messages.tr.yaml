@@ -7,6 +7,7 @@ mail_manager_subject: Konu
 mail_templateid: Tanımlayıcı
 mail_templateid_info: Şablon özel tanımlayıcı değeridir, varsayılan olarak ayarlanmıştır.
 mail_language: Dil
+delete_all: Tümünü Sil
 
 mail_manager_logger: Posta Günlüğü
 mail_manager_logger_desc: Sistem üzerinden gönderilen posta kayıtları

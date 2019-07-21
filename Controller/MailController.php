@@ -12,6 +12,7 @@
 namespace Pd\MailerBundle\Controller;
 
 use Knp\Component\Pager\PaginatorInterface;
+use Pd\MailerBundle\Entity\MailTemplate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * Mail Manager.
@@ -30,7 +32,7 @@ class MailController extends AbstractController
     /**
      * List Mail Templates.
      *
-     * @param Request            $request
+     * @param Request $request
      * @param PaginatorInterface $paginator
      *
      * @IsGranted("ROLE_MAIL_TEMPLATELIST")
@@ -64,9 +66,9 @@ class MailController extends AbstractController
     /**
      * Add Templates.
      *
-     * @param Request               $request
+     * @param Request $request
      * @param ParameterBagInterface $bag
-     * @param null                  $id
+     * @param null $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEADD")
      *
@@ -128,7 +130,7 @@ class MailController extends AbstractController
     /**
      * Edit Templates.
      *
-     * @param Request               $request
+     * @param Request $request
      * @param ParameterBagInterface $bag
      * @param $id
      *
@@ -208,6 +210,32 @@ class MailController extends AbstractController
     }
 
     /**
+     * Preview Template
+     *
+     * @param Request $request
+     * @param $id
+     *
+     * @return JsonResponse
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function previewTemplate(Request $request)
+    {
+        $data = $request->request->all();
+        $template = $data['template'] ?? '';
+        unset($data['templated']);
+
+        // Render
+        $content = $this->get('twig')->createTemplate($template)->render($data);
+
+        // Response
+        return $this->json([
+            'content' => $content
+        ]);
+    }
+
+    /**
      * Active/Deactive Templates.
      *
      * @param Request $request
@@ -245,7 +273,7 @@ class MailController extends AbstractController
     /**
      * View Mail Logs.
      *
-     * @param Request            $request
+     * @param Request $request
      * @param PaginatorInterface $paginator
      *
      * @IsGranted("ROLE_MAIL_LOGGER")
@@ -306,8 +334,8 @@ class MailController extends AbstractController
             $translator->trans('mail_content_type') => $log->getContentType(),
             $translator->trans('date') => date('Y-m-d H:i:s', $log->getDate()->getTimestamp()),
             $translator->trans('mail_reply_to') => $log->getReplyTo(),
-            $translator->trans('mail_header') => '<code>'.str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())).'</code>',
-            $translator->trans('mail_status') => $log->getStatus().' = '.$this->swiftEventFilter($translator, $log->getStatus()),
+            $translator->trans('mail_header') => '<code>' . str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())) . '</code>',
+            $translator->trans('mail_status') => $log->getStatus() . ' = ' . $this->swiftEventFilter($translator, $log->getStatus()),
             $translator->trans('mail_exception') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getException())),
         ];
 
@@ -353,9 +381,31 @@ class MailController extends AbstractController
     }
 
     /**
+     * Delete Logs.
+     *
+     * @param Request $request
+     *
+     * @IsGranted("ROLE_MAIL_LOGDELETE")
+     *
+     * @return Response
+     */
+    public function deleteAllLog(Request $request): Response
+    {
+        // Remove Mail Log
+        $em = $this->getDoctrine()->getManager();
+        $em->createQueryBuilder('')
+            ->delete($this->getParameter('pd_mailer.mail_log_class'), 'log')
+            ->getQuery()
+            ->execute();
+
+        // Redirect Back
+        return $this->redirect($request->headers->get('referer', $this->generateUrl('admin_mail_logger')));
+    }
+
+    /**
      * Array Key => Value Implode.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $glue
      *
      * @return array

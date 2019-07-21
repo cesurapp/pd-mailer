@@ -7,6 +7,7 @@ mail_manager_subject: Subject
 mail_templateid: Identifier
 mail_templateid_info: Template is a custom identifier value, set by default.
 mail_language: Language
+delete_all: Delete All
 
 mail_manager_logger: Mail Logging
 mail_manager_logger_desc: Mail records sent through the system

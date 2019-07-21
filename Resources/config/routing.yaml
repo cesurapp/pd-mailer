@@ -16,6 +16,10 @@ admin_mail_template_delete:
     path: /settings/mail/delete/{id}
     controller: Pd\MailerBundle\Controller\MailController::deleteTemplate
     methods: [GET]
+admin_mail_template_preview:
+    path: /settings/mail/preview
+    controller: Pd\MailerBundle\Controller\MailController::previewTemplate
+    methods: [POST]
 admin_mail_template_activate:
     path: /settings/mail/activate/{id}
     controller: Pd\MailerBundle\Controller\MailController::activeTemplate
@@ -31,6 +35,12 @@ admin_mail_logview:
 admin_mail_logdelete:
     path:   /settings/mail/logdelete/{mailLog}
     controller: Pd\MailerBundle\Controller\MailController::deleteLog
+    defaults:
+        mailLog: null
+    methods: [POST,GET]
+admin_mail_logdeleteall:
+    path:   /settings/mail/logdeleteall
+    controller: Pd\MailerBundle\Controller\MailController::deleteAllLog
     defaults:
         mailLog: null
     methods: [POST,GET]
