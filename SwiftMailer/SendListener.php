@@ -132,7 +132,7 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
      */
     public function exceptionThrown(Swift_Events_TransportExceptionEvent $evt)
     {
-        if ($this->bag->get('pd_mailer.logger_active')) {
+        if ($this->bag->get('pd_mailer.logger_active') && $this->log) {
             // Update Data
             $this->log->setStatus(\Swift_Events_SendEvent::RESULT_FAILED);
             $this->log->addException($evt->getException()->getMessage().PHP_EOL);
