@@ -57,7 +57,7 @@ class MailController extends AbstractController
         $this->get('session')->set('backUrl', $request->getRequestUri());
 
         // Render Page
-        return $this->render('@PdMailer/list.html.twig', [
+        return $this->render($this->getParameter('pd_user.template_path') . '/list.html.twig', [
             'templates' => $pagination,
             'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
@@ -118,7 +118,7 @@ class MailController extends AbstractController
         }
 
         // Render Page
-        return $this->render('@PdMailer/template.html.twig', [
+        return $this->render($this->getParameter('pd_user.template_path') . '/template.html.twig', [
             'form' => $form->createView(),
             'objects' => @unserialize($mailLog->getBody()),
             'title' => 'mail_manager_template_add',
@@ -166,7 +166,7 @@ class MailController extends AbstractController
         }
 
         // Render Page
-        return $this->render('@PdMailer/template.html.twig', [
+        return $this->render($this->getParameter('pd_user.template_path') . '/template.html.twig', [
             'form' => $form->createView(),
             'objects' => @unserialize($mailTemplate->getTemplateData()),
             'title' => 'mail_manager_template_edit',
@@ -297,7 +297,7 @@ class MailController extends AbstractController
         );
 
         // Render Page
-        return $this->render('@PdMailer/logger.html.twig', [
+        return $this->render($this->getParameter('pd_user.template_path') . '/logger.html.twig', [
             'maillogs' => $mailLog,
             'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);

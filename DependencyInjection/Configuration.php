@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('menu_root_name')->defaultValue('main_menu')->end()
                 ->scalarNode('menu_name')->defaultValue('nav_config')->end()
                 ->scalarNode('base_template')->defaultValue('Admin/base.html.twig')->end()
+                ->scalarNode('template_path')->defaultValue('@PdMailer')->end()
             ->end();
 
         return $treeBuilder;
