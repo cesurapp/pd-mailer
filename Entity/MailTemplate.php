@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="mail_template")
  * @ORM\Entity(repositoryClass="Pd\MailerBundle\Repository\MailTemplateRepository")
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class MailTemplate
 {

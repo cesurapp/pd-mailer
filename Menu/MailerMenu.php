@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -17,16 +17,12 @@ use Pd\MenuBundle\Builder\Menu;
 /**
  * Mail Menu.
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class MailerMenu extends Menu
 {
     /**
      * Mail Manager Custom Menus.
-     *
-     * @param array $options
-     *
-     * @return ItemInterface
      */
     public function createMenu(array $options = []): ItemInterface
     {

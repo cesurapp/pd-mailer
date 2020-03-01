@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -26,9 +26,6 @@ class PdMailerExtension extends Extension
 {
     /**
      * Load Bundle Config and Services.
-     *
-     * @param array            $configs
-     * @param ContainerBuilder $container
      *
      * @throws \Exception
      */

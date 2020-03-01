@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Swiftmailer Plugin.
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class SendListener implements \Swift_Events_SendListener, \Swift_Events_TransportExceptionListener
 {
@@ -55,12 +55,6 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
      */
     private $log;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param ParameterBagInterface  $bag
-     * @param RequestStack           $request
-     * @param RenderInterface        $engine
-     */
     public function __construct(EntityManagerInterface $entityManager, ParameterBagInterface $bag, RequestStack $request, RenderInterface $engine)
     {
         $this->entityManager = $entityManager;
@@ -71,8 +65,6 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
     /**
      * Invoked immediately before the Message is sent.
-     *
-     * @param \Swift_Events_SendEvent $evt
      *
      * @throws \Throwable
      */
@@ -113,8 +105,6 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
     /**
      * Invoked immediately after the Message is sent.
-     *
-     * @param \Swift_Events_SendEvent $evt
      */
     public function sendPerformed(\Swift_Events_SendEvent $evt)
     {
@@ -127,8 +117,6 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
 
     /**
      * Invoked as a TransportException is thrown in the Transport system.
-     *
-     * @param Swift_Events_TransportExceptionEvent $evt
      */
     public function exceptionThrown(Swift_Events_TransportExceptionEvent $evt)
     {
@@ -146,7 +134,6 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
     /**
      * Create Mail Log.
      *
-     * @param \Swift_Mime_SimpleMessage $message
      * @param $status
      * @param $templateID
      * @param $language
@@ -186,7 +173,6 @@ class SendListener implements \Swift_Events_SendListener, \Swift_Events_Transpor
     /**
      * Update Log Status & Date.
      *
-     * @param \Swift_Mime_SimpleMessage $message
      * @param $status
      *
      * @return bool

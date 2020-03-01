@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="mail_log")
  * @ORM\Entity(repositoryClass="Pd\MailerBundle\Repository\MailLogRepository")
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class MailLog
 {
@@ -279,8 +279,6 @@ class MailLog
 
     /**
      * Set Date.
-     *
-     * @param \DateTimeInterface $date
      *
      * @return MailLog
      */

@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -27,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Mail Template Form.
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class TemplateForm extends AbstractType
 {
@@ -71,8 +71,6 @@ class TemplateForm extends AbstractType
 
     /**
      * Form Default Options.
-     *
-     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -83,8 +81,6 @@ class TemplateForm extends AbstractType
 
     /**
      * Return Active Language List.
-     *
-     * @param ParameterBagInterface $bag
      *
      * @return array|bool
      */

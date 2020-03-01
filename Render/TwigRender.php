@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -18,7 +18,7 @@ use Twig\Environment;
 /**
  * Twig Render Class.
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class TwigRender implements RenderInterface
 {
@@ -39,10 +39,6 @@ class TwigRender implements RenderInterface
 
     /**
      * TwigRender constructor.
-     *
-     * @param Environment            $twig
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $defaultLanguage
      */
     public function __construct(Environment $twig, EntityManagerInterface $entityManager, string $defaultLanguage)
     {
@@ -54,8 +50,6 @@ class TwigRender implements RenderInterface
     /**
      * Render Template.
      *
-     * @param string                    $templateID
-     * @param string                    $language
      * @param \Swift_Mime_SimpleMessage $message
      *
      * @throws \Throwable

@@ -5,14 +5,13 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
 namespace Pd\MailerBundle\Controller;
 
 use Knp\Component\Pager\PaginatorInterface;
-use Pd\MailerBundle\Entity\MailTemplate;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -20,24 +19,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 /**
  * Mail Manager.
  *
- * @author Kerem APAYDIN <kerem@apaydin.me>
+ * @author Ramazan APAYDIN <apaydin541@gmail.com>
  */
 class MailController extends AbstractController
 {
     /**
      * List Mail Templates.
      *
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     *
      * @IsGranted("ROLE_MAIL_TEMPLATELIST")
-     *
-     * @return Response
      */
     public function list(Request $request, PaginatorInterface $paginator): Response
     {
@@ -57,7 +50,7 @@ class MailController extends AbstractController
         $this->get('session')->set('backUrl', $request->getRequestUri());
 
         // Render Page
-        return $this->render($this->getParameter('pd_mailer.template_path') . '/list.html.twig', [
+        return $this->render($this->getParameter('pd_mailer.template_path').'/list.html.twig', [
             'templates' => $pagination,
             'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
@@ -66,13 +59,9 @@ class MailController extends AbstractController
     /**
      * Add Templates.
      *
-     * @param Request $request
-     * @param ParameterBagInterface $bag
      * @param null $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEADD")
-     *
-     * @return Response
      */
     public function addTemplate(Request $request, ParameterBagInterface $bag, $id = null): Response
     {
@@ -118,7 +107,7 @@ class MailController extends AbstractController
         }
 
         // Render Page
-        return $this->render($this->getParameter('pd_mailer.template_path') . '/template.html.twig', [
+        return $this->render($this->getParameter('pd_mailer.template_path').'/template.html.twig', [
             'form' => $form->createView(),
             'objects' => @unserialize($mailLog->getBody()),
             'title' => 'mail_manager_template_add',
@@ -130,13 +119,9 @@ class MailController extends AbstractController
     /**
      * Edit Templates.
      *
-     * @param Request $request
-     * @param ParameterBagInterface $bag
      * @param $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEEDIT")
-     *
-     * @return Response
      */
     public function editTemplate(Request $request, ParameterBagInterface $bag, $id): Response
     {
@@ -166,7 +151,7 @@ class MailController extends AbstractController
         }
 
         // Render Page
-        return $this->render($this->getParameter('pd_mailer.template_path') . '/template.html.twig', [
+        return $this->render($this->getParameter('pd_mailer.template_path').'/template.html.twig', [
             'form' => $form->createView(),
             'objects' => @unserialize($mailTemplate->getTemplateData()),
             'title' => 'mail_manager_template_edit',
@@ -178,12 +163,9 @@ class MailController extends AbstractController
     /**
      * Delete Templates.
      *
-     * @param Request $request
      * @param $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEDELETE")
-     *
-     * @return Response
      */
     public function deleteTemplate(Request $request, $id): Response
     {
@@ -210,15 +192,14 @@ class MailController extends AbstractController
     }
 
     /**
-     * Preview Template
+     * Preview Template.
      *
-     * @param Request $request
      * @param $id
-     *
-     * @return JsonResponse
      *
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\SyntaxError
+     *
+     * @return JsonResponse
      */
     public function previewTemplate(Request $request)
     {
@@ -231,19 +212,16 @@ class MailController extends AbstractController
 
         // Response
         return $this->json([
-            'content' => $content
+            'content' => $content,
         ]);
     }
 
     /**
      * Active/Deactive Templates.
      *
-     * @param Request $request
      * @param $id
      *
      * @IsGranted("ROLE_MAIL_TEMPLATEACTIVE")
-     *
-     * @return Response
      */
     public function activeTemplate(Request $request, $id): Response
     {
@@ -273,12 +251,7 @@ class MailController extends AbstractController
     /**
      * View Mail Logs.
      *
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     *
      * @IsGranted("ROLE_MAIL_LOGGER")
-     *
-     * @return Response
      */
     public function logger(Request $request, PaginatorInterface $paginator): Response
     {
@@ -297,7 +270,7 @@ class MailController extends AbstractController
         );
 
         // Render Page
-        return $this->render($this->getParameter('pd_mailer.template_path') . '/logger.html.twig', [
+        return $this->render($this->getParameter('pd_mailer.template_path').'/logger.html.twig', [
             'maillogs' => $mailLog,
             'base_template' => $this->getParameter('pd_mailer.base_template'),
         ]);
@@ -306,12 +279,9 @@ class MailController extends AbstractController
     /**
      * View Log.
      *
-     * @param TranslatorInterface $translator
      * @param $id
      *
      * @IsGranted("ROLE_MAIL_VIEWLOG")
-     *
-     * @return JsonResponse
      */
     public function viewLog(TranslatorInterface $translator, $id): JsonResponse
     {
@@ -334,8 +304,8 @@ class MailController extends AbstractController
             $translator->trans('mail_content_type') => $log->getContentType(),
             $translator->trans('date') => date('Y-m-d H:i:s', $log->getDate()->getTimestamp()),
             $translator->trans('mail_reply_to') => $log->getReplyTo(),
-            $translator->trans('mail_header') => '<code>' . str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())) . '</code>',
-            $translator->trans('mail_status') => $log->getStatus() . ' = ' . $this->swiftEventFilter($translator, $log->getStatus()),
+            $translator->trans('mail_header') => '<code>'.str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getHeader())).'</code>',
+            $translator->trans('mail_status') => $log->getStatus().' = '.$this->swiftEventFilter($translator, $log->getStatus()),
             $translator->trans('mail_exception') => str_replace(PHP_EOL, '<br/>', htmlspecialchars($log->getException())),
         ];
 
@@ -346,12 +316,9 @@ class MailController extends AbstractController
     /**
      * Delete Logs.
      *
-     * @param Request $request
      * @param $mailLog
      *
      * @IsGranted("ROLE_MAIL_LOGDELETE")
-     *
-     * @return Response
      */
     public function deleteLog(Request $request, $mailLog): Response
     {
@@ -383,11 +350,7 @@ class MailController extends AbstractController
     /**
      * Delete Logs.
      *
-     * @param Request $request
-     *
      * @IsGranted("ROLE_MAIL_LOGDELETE")
-     *
-     * @return Response
      */
     public function deleteAllLog(Request $request): Response
     {
@@ -405,10 +368,7 @@ class MailController extends AbstractController
     /**
      * Array Key => Value Implode.
      *
-     * @param array $array
      * @param string $glue
-     *
-     * @return array
      */
     private function implodeKeyValue(array $array, $glue = ' - '): array
     {
@@ -425,10 +385,7 @@ class MailController extends AbstractController
     /**
      * Swift Event.
      *
-     * @param TranslatorInterface $translator
      * @param $event
-     *
-     * @return string
      */
     private function swiftEventFilter(TranslatorInterface $translator, $event): string
     {

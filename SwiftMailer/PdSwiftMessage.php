@@ -5,7 +5,7 @@
  *
  * @package     pd-mailer
  * @license     LICENSE
- * @author      Kerem APAYDIN <kerem@apaydin.me>
+ * @author      Ramazan APAYDIN <apaydin541@gmail.com>
  * @link        https://github.com/appaydin/pd-mailer
  */
 
@@ -20,8 +20,6 @@ class PdSwiftMessage extends \Swift_Message
 
     /**
      * Set Message Content Template ID.
-     *
-     * @param string|null $templateId
      *
      * @return $this
      */
