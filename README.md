@@ -77,7 +77,7 @@ $message = (new PdSwiftMessage)
     ->setTo('example@gmail.com')
     ->setSubject('Subject')
     ->setBody(serialize([
-        'firstname' => 'Kerem',
+        'firstname' => 'Ramazan',
         'lastname' => 'APAYDIN'
     ]), 'text/html'); // Data to be used in the template. - Required
 
