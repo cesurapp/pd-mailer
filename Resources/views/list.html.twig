@@ -10,9 +10,6 @@
     <span class="desc">{{ 'mail_manager_list_desc'|trans }}</span>
 {% endblock %}
 
-{# Content Navigation #}
-{% block content_nav %}{{ pd_menu_render('Pd\\MailerBundle\\Menu\\MailerMenu') }}{% endblock %}
-
 {# Content Body #}
 {% block content_body %}
     <!-- Table List -->
@@ -39,12 +36,12 @@
                         <div class="floating-menu">
                             <a><i class="material-icons">more_horiz</i></a>
                             <ul>
-                                <li><a data-modal="confirm" href="{{ path('admin_mail_template_delete', {'id': template.id}) }}" data-tooltip title="{{ 'delete'|trans }}"
+                                <li><a data-modal="confirm" href="{{ path('mail_template_delete', {'id': template.id}) }}" data-tooltip title="{{ 'delete'|trans }}"
                                        class="text-danger"><i class="material-icons">delete</i></a>
                                 </li>
-                                <li><a href="{{ path('admin_mail_template_activate',{'id':template.id}) }}" class="{{ template.status ? 'text-success' }}" data-tooltip title="{{ 'activate_deactivate'|trans }}"><i class="material-icons">check_circle</i></a>
+                                <li><a href="{{ path('mail_template_activate',{'id':template.id}) }}" class="{{ template.status ? 'text-success' }}" data-tooltip title="{{ 'activate_deactivate'|trans }}"><i class="material-icons">check_circle</i></a>
                                 </li>
-                                <li><a href="{{ path('admin_mail_template_edit',{'id':template.id}) }}" data-tooltip title="{{ 'edit'|trans }}"><i class="material-icons">mode_edit</i></a>
+                                <li><a href="{{ path('mail_template_edit',{'id':template.id}) }}" data-tooltip title="{{ 'edit'|trans }}"><i class="material-icons">mode_edit</i></a>
                                 </li>
                             </ul>
                         </div>

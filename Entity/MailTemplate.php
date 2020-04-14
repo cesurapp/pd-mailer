@@ -36,31 +36,9 @@ class MailTemplate
     /**
      * @var string
      *
-     * @ORM\Column(name="templateId", type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=50)
      */
     private $templateId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
-     */
-    private $subject;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fromName", type="string", length=100, nullable=true)
-     */
-    private $fromName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fromEmail", type="string", length=100, nullable=true)
-     * @Assert\Email()
-     */
-    private $fromEmail;
 
     /**
      * @var string
@@ -70,16 +48,24 @@ class MailTemplate
     private $template;
 
     /**
-     * @var string
+     * @var array|null
      *
-     * @ORM\Column(name="templateData", type="text", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      */
     private $templateData;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="language", type="string", length=3, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $subject;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=3)
+     * @Assert\Language()
      */
     private $language;
 
@@ -95,19 +81,79 @@ class MailTemplate
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Set subject.
+     * Get contentId.
      *
-     * @param string $subject
+     * @return string
+     */
+    public function getTemplateId(): ?string
+    {
+        return $this->templateId;
+    }
+
+    /**
+     * Set contentId.
+     *
+     * @return $this
+     */
+    public function setTemplateId(string $templateId): self
+    {
+        $this->templateId = $templateId;
+
+        return $this;
+    }
+
+    /**
+     * Get template.
+     */
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    /**
+     * Set template.
      *
      * @return MailTemplate
      */
-    public function setSubject($subject)
+    public function setTemplate(?string $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * Get Template Data.
+     */
+    public function getTemplateData(): ?array
+    {
+        return $this->templateData;
+    }
+
+    /**
+     * Set Template Data.
+     *
+     * @return $this
+     */
+    public function setTemplateData(?array $templateData): self
+    {
+        $this->templateData = $templateData;
+
+        return $this;
+    }
+
+    /**
+     * Set subject.
+     *
+     * @return MailTemplate
+     */
+    public function setSubject(?string $subject): self
     {
         $this->subject = $subject;
 
@@ -116,72 +162,30 @@ class MailTemplate
 
     /**
      * Get subject.
-     *
-     * @return string
      */
-    public function getSubject()
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
 
     /**
-     * Set template.
-     *
-     * @param string $template
-     *
-     * @return MailTemplate
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    /**
-     * Get template.
+     * Get language.
      *
      * @return string
      */
-    public function getTemplate()
+    public function getLanguage(): ?string
     {
-        return $this->template;
+        return $this->language;
     }
 
     /**
-     * Set Template Data.
+     * Set language.
      *
-     * @param string $templateData
-     *
-     * @return MailTemplate
+     * @return $this
      */
-    public function setTemplateData($templateData)
+    public function setLanguage(string $language): self
     {
-        $this->templateData = $templateData;
-
-        return $this;
-    }
-
-    /**
-     * Get Template Data.
-     *
-     * @return string
-     */
-    public function getTemplateData()
-    {
-        return $this->templateData;
-    }
-
-    /**
-     * Set status.
-     *
-     * @param bool $status
-     *
-     * @return MailTemplate
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
+        $this->language = $language;
 
         return $this;
     }
@@ -191,104 +195,22 @@ class MailTemplate
      *
      * @return bool
      */
-    public function getStatus()
+    public function getStatus(): ?bool
     {
         return $this->status;
     }
 
     /**
-     * Set contentId.
+     * Set status.
      *
-     * @param string $templateId
+     * @param bool $status
      *
-     * @return MailTemplate
+     * @return $this
      */
-    public function setTemplateId($templateId)
+    public function setStatus($status): self
     {
-        $this->templateId = $templateId;
+        $this->status = $status;
 
         return $this;
-    }
-
-    /**
-     * Get contentId.
-     *
-     * @return string
-     */
-    public function getTemplateId()
-    {
-        return $this->templateId;
-    }
-
-    /**
-     * Set fromName.
-     *
-     * @param string $fromName
-     *
-     * @return MailTemplate
-     */
-    public function setFromName($fromName)
-    {
-        $this->fromName = $fromName;
-
-        return $this;
-    }
-
-    /**
-     * Get fromName.
-     *
-     * @return string
-     */
-    public function getFromName()
-    {
-        return $this->fromName;
-    }
-
-    /**
-     * Set fromEmail.
-     *
-     * @param string $fromEmail
-     *
-     * @return MailTemplate
-     */
-    public function setFromEmail($fromEmail)
-    {
-        $this->fromEmail = $fromEmail;
-
-        return $this;
-    }
-
-    /**
-     * Get fromEmail.
-     *
-     * @return string
-     */
-    public function getFromEmail()
-    {
-        return $this->fromEmail;
-    }
-
-    /**
-     * Set language.
-     *
-     * @param string $language
-     *
-     * @return MailTemplate
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
-    /**
-     * Get language.
-     *
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->language;
     }
 }

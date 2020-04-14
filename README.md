@@ -1,5 +1,5 @@
 # pdMailer Bundle
-pdMailer is the SwiftMailer extension is written for pdAdmin. It keeps logs of mail sent by Swiftmailer and provides template interface for mail.
+pdMailer is the Symfony Mailer extension is written for pdAdmin. It keeps logs of mail sent by Symfony Mailer and provides template interface for mail.
 
 [![Packagist](https://img.shields.io/packagist/dt/appaydin/pd-mailer.svg)](https://github.com/appaydin/pd-mailer)
 [![Github Release](https://img.shields.io/github/release/appaydin/pd-mailer.svg)](https://github.com/appaydin/pd-mailer)
@@ -26,7 +26,7 @@ of the Composer documentation.
 
 ### Step 2: Enable the Bundle
 
-With Symfony 4, the package will be activated automatically. But if something goes wrong, you can install it manually.
+With Symfony 5, the package will be activated automatically. But if something goes wrong, you can install it manually.
 
 Then, enable the bundle by adding it to the list of registered bundles
 in the `config/bundles.php` file of your project:
@@ -47,41 +47,35 @@ create the config/packages/mailer.yaml file for the settings.
 ```yaml
 logger_active: true
 template_active: true
-sender_address: 'example@example.com'
-sender_name: 'pdMailer'
 list_count: 30
 active_language: ['tr', 'en']
 ```
 * __logger_active__: Enable mail logs.
+* __mail_template_type__: Mail template form type
 * __template_active__: Enable mail template.
-* __sender_address__: Sender mail adress
-* __sender_name__: Sender Name
 * __list_count__: Log or Template page listing count
 * __active_language__: List of active languages
-* __mail_log_class__: Mail log entity class
-* __mail_template_class__: Mail template entity class
-* __mail_template_type__: Mail template form type
-* __menu_root_name__: Main menu event name
-* __menu_name__: Parent menu name
+* __base_template__: Mail template form type
+* __template_path__: Enable mail template.
 
 How to use
 ---
-The PDMailer plug-in will enable all mail to be logged by default. You must use the PdSwiftMessage class to add a template to the post.
+The PDMailer plug-in will enable all mail to be logged by default.
 ```php
 <?php
 
 // Create Message
-$message = (new PdSwiftMessage)
-    ->setTemplateId('register_form_template') // Required
-    ->setFrom('example@example.com', 'pdMailer')
-    ->setTo('example@gmail.com')
-    ->setSubject('Subject')
-    ->setBody(serialize([
-        'firstname' => 'Ramazan',
-        'lastname' => 'APAYDIN'
-    ]), 'text/html'); // Data to be used in the template. - Required
+$email = new Email();
+$email
+    ->from('example@example.com')
+    ->to('example@gmail.com')
+    ->subject('Subject')
+    ->html([
+        'firstname' => 'Ramazan', 'lastname' => 'APAYDIN'
+    ]) // Data to be used in the template. - Required
+    ->getHeaders()->addTextHeader('template', 'customTemplateID'); // Required
 
 // Send Mail
-$this->get('mailer')->send($message);
+$this->get('mailer')->send($email);
 ```
-Create a template for 'register_form_template' from the pdAdmin panel.
+Create a template for 'customTemplateID' from the pdAdmin panel.

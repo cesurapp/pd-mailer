@@ -10,9 +10,6 @@
     <span class="desc">{{ 'mail_manager_logger_desc'|trans }}</span>
 {% endblock %}
 
-{# Content Navigation #}
-{% block content_nav %}{{ pd_menu_render('Pd\\MailerBundle\\Menu\\MailerMenu') }}{% endblock %}
-
 {# Content Body #}
 {% block content_body %}
     <!-- Action Button -->
@@ -29,7 +26,7 @@
                 <div class="modal-header"><h4><i class="material-icons">search</i>{{ 'delete_all'|trans }}</h4></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">{{ 'close'|trans }}</button>
-                    <a href="{{ path('admin_mail_logdeleteall') }}" class="btn btn-danger">{{ 'yes'|trans }}</a>
+                    <a href="{{ path('mail_log_clear') }}" class="btn btn-danger">{{ 'yes'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -47,16 +44,17 @@
                             <label class="custom-control-label" for="checkall"></label>
                         </div>
                     </th>
-                    <th class="wid-25">{{ knp_pagination_sortable(maillogs, 'mail_subject'|trans, 'm.subject') }}</th>
-                    <th class="wid-25">{{ knp_pagination_sortable(maillogs, 'mail_to'|trans, 'm.mTo') }}</th>
-                    <th class="wid-20">{{ knp_pagination_sortable(maillogs, 'date'|trans, 'm.date') }}</th>
-                    <th class="process">#</th>
+                    <th class="wid-25">{{ knp_pagination_sortable(logs, 'mail_templateid'|trans, 'm.templateId') }}</th>
+                    <th class="wid-25">{{ knp_pagination_sortable(logs, 'mail_subject'|trans, 'm.subject') }}</th>
+                    <th class="wid-25">{{ knp_pagination_sortable(logs, 'mail_to'|trans, 'm.mTo') }}</th>
+                    <th class="wid-25">{{ knp_pagination_sortable(logs, 'language'|trans, 'm.language') }}</th>
+                    <th class="wid-20">{{ knp_pagination_sortable(logs, 'date'|trans, 'm.date') }}</th>
                     <th class="process"></th>
                 </tr>
                 </thead>
 
                 <tbody>
-                {% for log in maillogs %}
+                {% for log in logs %}
                     <tr>
                         <td class="check">
                             <div class="custom-control custom-checkbox custom-control-inline">
@@ -64,17 +62,18 @@
                                 <label class="custom-control-label" for="c{{ log.id }}"></label>
                             </div>
                         </td>
+                        <td class="wid-25">{{ log.templateId }}</td>
                         <td class="wid-25">{{ log.subject }}</td>
-                        <td class="wid-25">{% for to in log.to|keys %}{{ to }}{% endfor %}</td>
+                        <td class="wid-25">{{ log.to|join('<br>') }}</td>
+                        <td class="wid-20">{{ log.language }}</td>
                         <td class="wid-20">{{ log.date|timeDiff }}</td>
-                        <td class="process"><span class="badge rounded-circle badge-{{ log.status|swiftEvent(true) }}" data-toggle="tooltip" data-tooltip title="{{ log.status|swiftEvent(false) }}">&nbsp;&nbsp;</span></td>
                         <td class="process">
                             <div class="floating-menu">
                                 <a><i class="material-icons">more_horiz</i></a>
                                 <ul id="processMenu">
-                                    <li><a href="{{ path('admin_mail_logdelete', {'mailLog': log.id}) }}" class="text-danger" data-modal="confirm" data-tooltip title="{{ 'delete'|trans }}"><i class="material-icons">delete</i></a></li>
-                                    <li><a href="{{ path('admin_mail_template_add', {'id': log.id}) }}" data-tooltip title="{{ 'create_mail_template'|trans }}"><i class="material-icons">email</i></a></li>
-                                    <li><a href="{{ path('admin_mail_logview', {'id': log.id}) }}" data-tooltip title="{{ 'view_log'|trans }}" data-toggle="modal" data-target="#viewLog"><i class="material-icons">remove_red_eye</i></a></li>
+                                    <li><a href="{{ path('mail_log_delete', {'id': log.id}) }}" class="text-danger" data-modal="confirm" data-tooltip title="{{ 'delete'|trans }}"><i class="material-icons">delete</i></a></li>
+                                    <li><a href="{{ path('mail_template_add', {'id': log.id}) }}" data-tooltip title="{{ 'create_mail_template'|trans }}"><i class="material-icons">email</i></a></li>
+                                    <li><a href="{{ path('mail_log_view', {'id': log.id}) }}" data-tooltip title="{{ 'view_log'|trans }}" data-toggle="modal" data-target="#viewLog"><i class="material-icons">remove_red_eye</i></a></li>
                                 </ul>
                             </div>
                         </td>
@@ -86,16 +85,16 @@
     </form>
 
     <!-- Pagination -->
-    {{ knp_pagination_render(maillogs) }}
+    {{ knp_pagination_render(logs) }}
 
     <!-- Log Viewer Modal Template -->
     <div id="viewLog" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"><h4><i class="material-icons">remove_red_eye</i>{{ 'mail_manager_logview'|trans }}</h4></div>
-                <div class="modal-body col-"></div>
+                <div class="modal-header"><h4>{{ 'mail_manager_logview'|trans }}</h4></div>
+                <div class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" id="close" class="btn btn-light" data-dismiss="modal">{{ 'close'|trans }}</button>
+                    <button type="button" id="close" class="btn btn-primary mt-0" data-dismiss="modal">{{ 'close'|trans }}</button>
                 </div>
             </div>
         </div>
@@ -118,7 +117,7 @@
         // Get Ajax Data
         $.getJSON(button.attr('href'), function (data) {
           $.each(data, function (key, val) {
-            modalBody.append('<div class="row"><label class="col-4 text-sm-right">' + key + '</label><div class="col-8 word-break">' + val + '</div></div>')
+            modalBody.append('<div class="row"><label class="col-4 text-sm-right font-weight-bold">' + key + ':</label><div class="col-8 word-break">' + val + '</div></div>')
           })
         });
       })

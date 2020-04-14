@@ -1,8 +1,5 @@
-nav_mail_manager: Mail Manager
-mail_manager_list: Mail Manager
+mail_manager_list: Mail Template Manager
 mail_manager_list_desc: System mail templates and log management
-nav_mail_template: Template
-nav_mail_logger: Daily
 mail_manager_subject: Subject
 mail_templateid: Identifier
 mail_templateid_info: Template is a custom identifier value, set by default.
@@ -22,12 +19,6 @@ mail_sender: From
 mail_header: Mail Header
 mail_status: Status Code
 mail_exception: Errors
-RESULT_SUCCESS: Sent
-RESULT_FAILED: Failed
-RESULT_SPOOLED: Added to Queue
-RESULT_PENDING: Not yet sent
-RESULT_TENTATIVE: Incorrect Send
-RESULT_DELETED: Deleted
 mail_manager_logview: Mail Details
 create_mail_template: Create Template
 view_log: View Log
