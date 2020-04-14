@@ -20,7 +20,7 @@
   "require": {
     "php": "^7.3.0",
     "symfony/mailer": "*",
-    "symfony/twig-bundle": "*",
+    "symfony/twig-bundle": "*"
   },
   "autoload": {
     "psr-4": {
