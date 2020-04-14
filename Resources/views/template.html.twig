@@ -6,13 +6,10 @@
 
 {# Content Title #}
 {% block content_head %}
-    <a href="{{ app.session.get('backUrl') }}" class="back-icon"><i class="material-icons">arrow_back</i></a>
+    <a href="{{ path('mail_template') }}" class="back-icon"><i class="material-icons">arrow_back</i></a>
     <span class="text">{{ title|trans }}</span>
     <span class="desc">{{ description|trans({'%s': form.templateId.vars.data}) }}</span>
 {% endblock %}
-
-{# Content Navigation #}
-{% block content_nav %}{{ pd_menu_render('Pd\\MailerBundle\\Menu\\MailerMenu') }}{% endblock %}
 
 {# Content Body #}
 {% block content_body %}
@@ -89,7 +86,7 @@
                 $(".editor-area .wraptext").click(function (e) {
                     e.preventDefault();
                     editor.getSession().setUseWrapMode(!editor.getSession().getUseWrapMode());
-                })
+                });
 
                 $(".editor-area .invertcolor").click(function (e) {
                     e.preventDefault();
@@ -122,7 +119,7 @@
                 data['template'] = $('#template_form_template').val();
 
                 $.ajax({
-                    url: '{{ path('admin_mail_template_preview') }}',
+                    url: '{{ path('mail_template_preview') }}',
                     method: "POST",
                     data: data,
                     processData: true,

@@ -33,13 +33,6 @@ class MailLog
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="mailId", type="string", length=130, unique=true)
-     */
-    private $mailId;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="mTo", type="array")
@@ -56,115 +49,60 @@ class MailLog
     /**
      * @var string
      *
-     * @ORM\Column(name="subject", type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $subject;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="body", type="text", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      */
     private $body;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="contentType", type="string", length=75)
-     */
-    private $contentType;
-
-    /**
      * @var \DateTimeInterface
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(type="datetime")
      */
     private $date;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="replyTo", type="array", nullable=true)
-     */
-    private $replyTo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="header", type="text")
-     */
-    private $header;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="string", length=20)
-     */
-    private $status;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="exception", type="text", nullable=true)
-     */
-    private $exception;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="templateId", type="string", nullable=true, length=50)
+     * @ORM\Column(type="string", nullable=true, length=75)
      */
     private $templateId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="language", type="string", length=5)
+     * @ORM\Column(name="language", type="string", length=3)
      */
     private $language;
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Set mId.
-     *
-     * @param string $mailId
-     *
-     * @return MailLog
+     * Get mTo.
      */
-    public function setMailId($mailId)
+    public function getTo(): array
     {
-        $this->mailId = $mailId;
-
-        return $this;
+        return $this->to;
     }
 
     /**
-     * Get mId.
-     *
-     * @return string
-     */
-    public function getMailId()
-    {
-        return $this->mailId;
-    }
-
-    /**
-     * Set mTo.
-     *
-     * @param array $to
+     * Set To.
      *
      * @return MailLog
      */
-    public function setTo($to)
+    public function setTo(array $to): self
     {
         $this->to = $to;
 
@@ -172,23 +110,19 @@ class MailLog
     }
 
     /**
-     * Get mTo.
-     *
-     * @return array
+     * Get From.
      */
-    public function getTo()
+    public function getFrom(): array
     {
-        return $this->to;
+        return $this->from;
     }
 
     /**
-     * Set mFrom.
-     *
-     * @param array $from
+     * Set From.
      *
      * @return MailLog
      */
-    public function setFrom($from)
+    public function setFrom(array $from): self
     {
         $this->from = $from;
 
@@ -196,23 +130,19 @@ class MailLog
     }
 
     /**
-     * Get mFrom.
-     *
-     * @return array
+     * Get subject.
      */
-    public function getFrom()
+    public function getSubject(): ?string
     {
-        return $this->from;
+        return $this->subject;
     }
 
     /**
      * Set subject.
      *
-     * @param string $subject
-     *
      * @return MailLog
      */
-    public function setSubject($subject)
+    public function setSubject(?string $subject): self
     {
         $this->subject = $subject;
 
@@ -220,61 +150,28 @@ class MailLog
     }
 
     /**
-     * Get subject.
-     *
-     * @return string
+     * Get body.
      */
-    public function getSubject()
+    public function getBody(): ?array
     {
-        return $this->subject;
+        return $this->body;
     }
 
     /**
      * Set body.
      *
-     * @param string $body
-     *
      * @return MailLog
      */
-    public function setBody($body)
+    public function setBody(?array $body): self
     {
         $this->body = $body;
 
         return $this;
     }
 
-    /**
-     * Get body.
-     *
-     * @return string
-     */
-    public function getBody()
+    public function getDate(): \DateTimeInterface
     {
-        return $this->body;
-    }
-
-    /**
-     * Set contentType.
-     *
-     * @param string $contentType
-     *
-     * @return MailLog
-     */
-    public function setContentType($contentType)
-    {
-        $this->contentType = $contentType;
-
-        return $this;
-    }
-
-    /**
-     * Get contentType.
-     *
-     * @return string
-     */
-    public function getContentType()
-    {
-        return $this->contentType;
+        return $this->date;
     }
 
     /**
@@ -282,7 +179,7 @@ class MailLog
      *
      * @return MailLog
      */
-    public function setDate(\DateTimeInterface $date)
+    public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -290,131 +187,21 @@ class MailLog
     }
 
     /**
-     * @return \DateTimeInterface
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set replyTo.
-     *
-     * @param string $replyTo
-     *
-     * @return MailLog
-     */
-    public function setReplyTo($replyTo)
-    {
-        $this->replyTo = $replyTo;
-
-        return $this;
-    }
-
-    /**
-     * Get replyTo.
+     * Get TemplateID.
      *
      * @return string
      */
-    public function getReplyTo()
+    public function getTemplateId(): ?string
     {
-        return $this->replyTo;
+        return $this->templateId;
     }
 
     /**
-     * Set header.
-     *
-     * @param string $header
+     * Set TemplateID.
      *
      * @return MailLog
      */
-    public function setHeader($header)
-    {
-        $this->header = $header;
-
-        return $this;
-    }
-
-    /**
-     * Get header.
-     *
-     * @return string
-     */
-    public function getHeader()
-    {
-        return $this->header;
-    }
-
-    /**
-     * Set status.
-     *
-     * @param string $status
-     *
-     * @return MailLog
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status.
-     *
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set exception.
-     *
-     * @param string $exception
-     *
-     * @return MailLog
-     */
-    public function setException($exception)
-    {
-        $this->exception = $exception;
-
-        return $this;
-    }
-
-    /**
-     * Add Exception.
-     *
-     * @param $exception
-     *
-     * @return MailLog
-     */
-    public function addException($exception)
-    {
-        $this->exception .= $exception;
-
-        return $this;
-    }
-
-    /**
-     * Get exception.
-     *
-     * @return string
-     */
-    public function getException()
-    {
-        return $this->exception;
-    }
-
-    /**
-     * Set contentId.
-     *
-     * @param string $templateId
-     *
-     * @return MailLog
-     */
-    public function setTemplateId($templateId)
+    public function setTemplateId(?string $templateId): self
     {
         $this->templateId = $templateId;
 
@@ -422,13 +209,11 @@ class MailLog
     }
 
     /**
-     * Get contentId.
-     *
-     * @return string
+     * Get language.
      */
-    public function getTemplateId()
+    public function getLanguage(): string
     {
-        return $this->templateId;
+        return $this->language;
     }
 
     /**
@@ -438,20 +223,10 @@ class MailLog
      *
      * @return MailLog
      */
-    public function setLanguage($language)
+    public function setLanguage($language): self
     {
         $this->language = $language;
 
         return $this;
-    }
-
-    /**
-     * Get language.
-     *
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->language;
     }
 }

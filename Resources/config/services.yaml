@@ -3,8 +3,6 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: false       # Allows optimizing the container by removing unused services; this also means
-        bind:
-            $defaultLanguage: '%default_locale%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -15,14 +13,3 @@ services:
     Pd\MailerBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
-
-    # Swiftmailer Listener Plugin
-    Pd\MailerBundle\SwiftMailer\SendListener:
-        tags:
-            - { name: swiftmailer.default.plugin }
-
-    # Add Menu to Main Navigation
-    Pd\MailerBundle\Menu\MainNavListener:
-        tags:
-            - { name: kernel.event_listener, event: main_menu.event, method: onCreate }
-

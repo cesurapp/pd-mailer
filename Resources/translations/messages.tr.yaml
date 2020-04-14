@@ -1,8 +1,5 @@
-nav_mail_manager: Posta Yöneticisi
-mail_manager_list: Posta Yöneticisi
+mail_manager_list: Posta Şablonları
 mail_manager_list_desc: Sistem posta şablonları ve günlük yönetimi
-nav_mail_template: Şablon
-nav_mail_logger: Günlük
 mail_manager_subject: Konu
 mail_templateid: Tanımlayıcı
 mail_templateid_info: Şablon özel tanımlayıcı değeridir, varsayılan olarak ayarlanmıştır.
@@ -22,12 +19,6 @@ mail_sender: Gönderen
 mail_header: Posta Başlığı
 mail_status: Durum Kodu
 mail_exception: Hatalar
-RESULT_SUCCESS: Gönderildi
-RESULT_FAILED: Başarısız
-RESULT_SPOOLED: Kuyruğa Eklendi
-RESULT_PENDING: Henüz Gönderilmedi
-RESULT_TENTATIVE: Hatalı Gönderim
-RESULT_DELETED: Silindi
 mail_manager_logview: Posta Detayları
 create_mail_template: Şablon Oluştur
 view_log: Günlüğü Görüntüle
