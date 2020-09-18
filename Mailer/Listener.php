@@ -84,6 +84,7 @@ class Listener implements EventSubscriberInterface
     {
         // Get Template ID
         $template = $email->getHeaders()->get('template');
+        $locale = $email->getHeaders()->get('locale')->getBodyAsString();
 
         // Create Log
         $log = new MailLog();
@@ -97,7 +98,7 @@ class Listener implements EventSubscriberInterface
             ->setSubject($email->getSubject())
             ->setBody(\is_array($email->getHtmlBody()) ? $email->getHtmlBody() : [])
             ->setDate(new \DateTime())
-            ->setLanguage($this->request->getCurrentRequest()->getLocale() ?? 'en')
+            ->setLanguage($locale ?? ($this->request->getCurrentRequest() ? $this->request->getCurrentRequest()->getLocale() : 'en'))
             ->setTemplateId($template ? $template->getBodyAsString() : '');
 
         // Save
@@ -112,7 +113,7 @@ class Listener implements EventSubscriberInterface
     {
         if ($templateId = $email->getHeaders()->get('template')) {
             $bodyData = $email->getHtmlBody();
-            $locale = $this->request->getCurrentRequest()->getLocale();
+            $locale = $email->getHeaders()->get('locale')->getBodyAsString();
 
             // Check Array
             if (\is_array($bodyData)) {
@@ -121,7 +122,7 @@ class Listener implements EventSubscriberInterface
                     ->findOneBy([
                         'templateId' => $templateId->getBody(),
                         'status' => true,
-                        'language' => $locale,
+                        'language' => $locale ?? ($this->request->getCurrentRequest() ? $this->request->getCurrentRequest()->getLocale() : 'en'),
                     ]);
 
                 if ($template) {
