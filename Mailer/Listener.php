@@ -84,7 +84,6 @@ class Listener implements EventSubscriberInterface
     {
         // Get Template ID
         $template = $email->getHeaders()->get('template');
-        $locale = $email->getHeaders()->get('locale')->getBodyAsString();
 
         // Create Log
         $log = new MailLog();
@@ -98,7 +97,7 @@ class Listener implements EventSubscriberInterface
             ->setSubject($email->getSubject())
             ->setBody(\is_array($email->getHtmlBody()) ? $email->getHtmlBody() : [])
             ->setDate(new \DateTime())
-            ->setLanguage($locale ?? ($this->request->getCurrentRequest() ? $this->request->getCurrentRequest()->getLocale() : 'en'))
+            ->setLanguage($this->getLocale($email))
             ->setTemplateId($template ? $template->getBodyAsString() : '');
 
         // Save
@@ -113,7 +112,6 @@ class Listener implements EventSubscriberInterface
     {
         if ($templateId = $email->getHeaders()->get('template')) {
             $bodyData = $email->getHtmlBody();
-            $locale = $email->getHeaders()->get('locale')->getBodyAsString();
 
             // Check Array
             if (\is_array($bodyData)) {
@@ -122,7 +120,7 @@ class Listener implements EventSubscriberInterface
                     ->findOneBy([
                         'templateId' => $templateId->getBody(),
                         'status' => true,
-                        'language' => $locale ?? ($this->request->getCurrentRequest() ? $this->request->getCurrentRequest()->getLocale() : 'en'),
+                        'language' => $this->getLocale($email),
                     ]);
 
                 if ($template) {
@@ -141,5 +139,18 @@ class Listener implements EventSubscriberInterface
             // Remove Template Header
             $email->getHeaders()->remove('template');
         }
+    }
+
+    /**
+     * Get Email Locale
+     *
+     * @return string
+     */
+    private function getLocale(Email $email): string
+    {
+        $locale = $email->getHeaders()->get('locale');
+        $locale = $locale ? $locale->getBodyAsString() : null;
+
+        return strtolower($locale ?? ($this->request->getCurrentRequest() ? $this->request->getCurrentRequest()->getLocale() : 'en'));
     }
 }
